@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
     kotlin("kapt")
 }
 
@@ -30,6 +31,17 @@ android {
             )
         }
     }
+    hilt {
+        enableAggregatingTask = false
+    }
+
+    kapt {
+        arguments {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
+        correctErrorTypes = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -66,8 +78,6 @@ dependencies {
     implementation(project(":core:network:model"))
     implementation(project(":core:common"))
     implementation(project(":core:common"))
-    implementation(project(":core:common"))
-    implementation(project(":core:common"))
     implementation(project(":core:database"))
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -76,12 +86,12 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    implementation("com.google.dagger:dagger:2.48")
+    implementation("com.google.dagger:dagger:2.49")
     kapt("com.google.dagger:dagger-compiler:2.48")
     implementation("com.google.dagger:dagger-android:2.48")
     kapt("com.google.dagger:dagger-android-processor:2.48")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.11.0")
     implementation(project(":feature:companies"))
     implementation(project(":feature:vacancies"))
     implementation(project(":feature:candidate"))
@@ -93,4 +103,20 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("androidx.compose.runtime:runtime-livedata:1.6.2")
+    implementation("com.google.dagger:hilt-android:2.49")
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+    implementation("com.google.dagger:hilt-android:2.49")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    implementation("com.google.dagger:dagger:2.49")
+    kapt("com.google.dagger:dagger-compiler:2.48")
+    implementation("com.google.dagger:dagger-android:2.48")
+    kapt("com.google.dagger:dagger-android-processor:2.48")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation("com.google.dagger:hilt-android:2.49")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    kapt("androidx.hilt:hilt-compiler:1.2.0")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 }

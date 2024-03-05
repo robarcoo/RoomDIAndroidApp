@@ -45,4 +45,8 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation(project(":core:database"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    implementation("com.google.dagger:dagger:2.48")
+    kapt("com.google.dagger:dagger-compiler:2.48")
+    implementation("com.google.dagger:dagger-android:2.48")
+    kapt("com.google.dagger:dagger-android-processor:2.48")
 }

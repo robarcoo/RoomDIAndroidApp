@@ -10,17 +10,12 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.example.candidate.CandidateScreen
+import com.example.candidate.ui.theme.CandidateScreen
 import com.example.common.di.DaggerNetworkModuleComponent
 import com.example.common.di.NetworkModuleComponent
-import com.example.common.di.RoomModuleComponent
 import com.example.common.event.CandidateEvent
 import com.example.common.viewmodel.CandidateState
-import com.example.common.viewmodel.CandidateViewModel
 import com.example.companies.CompaniesScreen
-import com.example.database.local.LocalDataSource
 import com.example.model.Network
 import com.example.vacancies.VacanciesScreen
 

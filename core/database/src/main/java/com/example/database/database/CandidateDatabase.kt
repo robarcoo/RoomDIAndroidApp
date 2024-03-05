@@ -10,8 +10,6 @@ import com.example.database.entity.CandidateInfo
 import com.example.database.entity.Contact
 import com.example.database.entity.Education
 import com.example.database.entity.Experience
-import dagger.Component
-import javax.inject.Singleton
 
 @Database(entities = [Candidate::class,
     CandidateInfo::class,
@@ -20,5 +18,6 @@ import javax.inject.Singleton
     Experience::class], version = 1)
 @TypeConverters(CandidateConverter::class)
 abstract class CandidateDatabase : RoomDatabase() {
-    abstract fun CandidateDao() : CandidateDao
+
+    abstract fun candidateDao() : CandidateDao
 }

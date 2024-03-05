@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
     kotlin("kapt")
 }
 
@@ -16,7 +17,9 @@ android {
     }
 
     kapt {
-        arguments {arg("room.schemaLocation", "$projectDir/schemas")}
+        arguments {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
     }
 
     buildTypes {
@@ -55,4 +58,5 @@ dependencies {
     implementation("com.google.dagger:dagger-android:2.48")
     kapt("com.google.dagger:dagger-android-processor:2.48")
     implementation("com.google.code.gson:gson:2.10.1")
+
 }

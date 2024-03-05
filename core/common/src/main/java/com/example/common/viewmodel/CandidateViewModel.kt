@@ -5,12 +5,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.common.event.CandidateEvent
 import com.example.database.dao.CandidateDao
 import com.example.database.entity.Candidate
-import com.example.database.local.LocalDataSource
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class CandidateViewModel @Inject constructor(
     private val repository: CandidateDao
 ) : ViewModel() {

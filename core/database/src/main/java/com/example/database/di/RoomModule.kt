@@ -9,43 +9,26 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dagger.hilt.android.scopes.ViewModelScoped
 
-//@Module
-//@InstallIn(ViewModelComponent::class)
-//object ContextModule {
-//
-//    @Singleton
-//    @Provides
-//    fun provideApplicationContext(@ApplicationContext context: Context): Context {
-//        return context
-//    }
-//}
 
 @Module
 @InstallIn(ViewModelComponent::class)
-class RoomModule() {
+object RoomModule {
 
-    @Singleton
-    @Provides
-    fun getContext(@ApplicationContext context: Context): Context {
-        return context
-    }
 
-    @Singleton
+    @ViewModelScoped
     @Provides
-    fun getRoom (context: Context) : CandidateDatabase {
-        return Room.databaseBuilder(context, CandidateDatabase::class.java, "database")
+    fun provideDB(@ApplicationContext context: Context) : CandidateDatabase {
+        return Room.databaseBuilder(context, CandidateDatabase::class.java, "database.db")
             .fallbackToDestructiveMigration()
             .build()
     }
 
-
-    @Singleton
+    @ViewModelScoped
     @Provides
-    fun getDao(database: CandidateDatabase) : CandidateDao {
-        return database.CandidateDao()
+    fun provideDao(database : CandidateDatabase) : CandidateDao {
+        return database.candidateDao()
     }
 
 }
