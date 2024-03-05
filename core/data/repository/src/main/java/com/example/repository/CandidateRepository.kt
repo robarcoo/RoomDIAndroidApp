@@ -1,24 +1,24 @@
 package com.example.repository
 
 
+import com.example.database.dao.CandidateDao
+import com.example.database.entity.Candidate
+import com.example.model.Network
+import com.example.retrofit.CandidateApi
+import com.example.retrofit.CompanyApi
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-//interface CandidateRepository {
-//
-//    suspend fun getAllCandidates() : Flow<List<Candidate>>
-//    suspend fun getCandidate(id : Int) : Flow<Candidate?>
-//    suspend fun deleteCandidate(candidate: Candidate)
-//    suspend fun insertCandidate(candidate : Candidate)
-//    suspend fun updateCandidate(candidate: Candidate)
-//}
-//
-//class CandidateRepositoryImpl @Inject constructor(private val localDataSource: com.example.myapplication.CandidateDao) : CandidateRepository {
-//    override suspend fun getAllCandidates(): Flow<List<Candidate>> = localDataSource.getCandidates()
-//    override suspend fun updateCandidate(candidate: Candidate) = localDataSource.insertCandidate(candidate)
-//    override suspend fun insertCandidate(candidate: Candidate) = localDataSource.insertCandidate(candidate)
-//    override suspend fun deleteCandidate(candidate: Candidate) = localDataSource.deleteCandidate(candidate)
-//    override suspend fun getCandidate(id: Int): Flow<Candidate?> = localDataSource.getCandidate(id)
-//
-//}
+interface CandidateRepository {
+
+    suspend fun loadFromServer() : List<Candidate>
+}
+
+class CandidateRepositoryImpl (private val network: Network) : CandidateRepository {
+    override suspend fun loadFromServer() : List<Candidate> {
+        val companyApi = network.getRetrofit().create(CandidateApi::class.java)
+        return companyApi.getAllCandidates()
+    }
+
+}
 

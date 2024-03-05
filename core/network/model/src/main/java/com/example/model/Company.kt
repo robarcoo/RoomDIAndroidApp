@@ -1,7 +1,5 @@
 package com.example.model
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class Company(
     val id: Int = 0,
     val name: String = "",

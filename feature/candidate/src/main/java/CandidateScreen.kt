@@ -1,4 +1,4 @@
-package com.example.candidate.ui.theme
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,14 +14,27 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.common.dialog.CandidateDialog
 import com.example.common.event.CandidateEvent
 import com.example.common.viewmodel.CandidateState
+import com.example.model.Network
+import com.example.repository.CandidateRepositoryImpl
 
 @Composable
-fun CandidateScreen(state: CandidateState, onEvent: (CandidateEvent) -> Unit) {
+fun CandidateScreen(state: CandidateState, onEvent: (CandidateEvent) -> Unit, network: Network) {
+    LaunchedEffect(state) {
+         val repository = CandidateRepositoryImpl(network).loadFromServer()
+         repository.forEach {
+             onEvent(CandidateEvent.setCandidateInfo(it.candidateInfo))
+             onEvent(CandidateEvent.setEducation(it.education))
+             onEvent(CandidateEvent.setExperience(it.experience))
+             onEvent(CandidateEvent.setFreeForm(it.freeForm))
+             onEvent(CandidateEvent.SaveCandidate)
+         }
+    }
         Scaffold (floatingActionButton = {
             FloatingActionButton(onClick = { onEvent(CandidateEvent.OpenDialog) }) {
                Icon(

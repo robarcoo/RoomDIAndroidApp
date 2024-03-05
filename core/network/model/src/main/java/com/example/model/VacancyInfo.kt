@@ -1,8 +1,6 @@
 package com.example.model
 
-import kotlinx.serialization.Serializable
 
-@Serializable
 data class VacancyInfo(
     val id: Int = 0,
     val profession: String = "",

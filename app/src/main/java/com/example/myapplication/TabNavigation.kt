@@ -10,7 +10,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.example.candidate.ui.theme.CandidateScreen
+import CandidateScreen
 import com.example.common.di.DaggerNetworkModuleComponent
 import com.example.common.di.NetworkModuleComponent
 import com.example.common.event.CandidateEvent
@@ -42,7 +42,7 @@ fun TabRowScreen(state: CandidateState,
         when (tabIndex) {
             0 -> CompaniesScreen(network)
             1 -> VacanciesScreen(network)
-            2 -> CandidateScreen(state, onEvent)
+            2 -> CandidateScreen(state, onEvent, network)
         }
     }
 }

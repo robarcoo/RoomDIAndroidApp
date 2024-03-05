@@ -45,7 +45,7 @@ fun CandidateDialog(state: CandidateState,
                 }
             )
             TextField(
-                value = state.freeForm.toString(),
+                value = state.freeForm,
                 onValueChange = { onEvent(CandidateEvent.setFreeForm(it))
                 },
                 placeholder = {
