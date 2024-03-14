@@ -11,11 +11,11 @@ import kotlinx.coroutines.flow.Flow
 interface CandidateDao {
 
     @Upsert
-    suspend fun insertCandidate(candidate: Candidate)
+    fun insertCandidate(candidate: Candidate)
 
 
     @Delete
-    suspend fun deleteCandidate(candidate: Candidate)
+    fun deleteCandidate(candidate: Candidate)
 
 
     @Query("SELECT * FROM Candidate")

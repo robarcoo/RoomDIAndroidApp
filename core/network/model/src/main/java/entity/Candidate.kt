@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class Candidate(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    var id: Int = 0,
     @ColumnInfo( name = "candidate_info")
     val candidate_info: CandidateInfo?,
     val education: List<Education?>?,

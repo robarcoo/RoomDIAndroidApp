@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,31 +36,37 @@ fun CandidateScreen(state: CandidateState, onEvent: (CandidateEvent) -> Unit) {
             if (state.isAddingCandidate) {
                 CandidateDialog(state = state, onEvent = onEvent)
             }
-
             LazyColumn(contentPadding = padding,
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                items(state.candidates) { candidate ->
-                    if (state.isAddingCandidate) {
-                        CandidateDialog(state = state, onEvent = onEvent)
-                    }
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(
-                                text = "${candidate.candidate_info}"
-                            )
-                            Text(
-                                text = "${candidate.education}"
-                            )
-                            Text(
-                                text = "${candidate.job_experience}"
-                            )
-                            Text(
-                                text = "${candidate.free_form}"
-                            )
+                    items(state.candidates, key = { it.id}) { candidate ->
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text(
+                                    text = "${candidate.candidate_info}"
+                                )
+                                Text(
+                                    text = "${candidate.education}"
+                                )
+                                Text(
+                                    text = "${candidate.job_experience}"
+                                )
+                                Text(
+                                    text = "${candidate.free_form}"
+                                )
+                            }
+                            IconButton(onClick = {
+                                onEvent(CandidateEvent.deleteCandidate(candidate))
+
+                            }) {
+                                Icon(
+                                    imageVector = Icons.Default.Delete,
+                                    contentDescription = "Delete Candidate"
+                                )
+                            }
+
+
                         }
-                    }
-                    Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete Candidate")
                 }
 
         }

@@ -11,5 +11,5 @@ data class CandidateState(
     val candidateInfo: CandidateInfo? = null,
     val education: List<Education?>? = emptyList(),
     val experience: List<Experience?>? = emptyList(),
-    val freeForm: String? = ""
+    var freeForm: String? = ""
     )

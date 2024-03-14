@@ -48,4 +48,5 @@ dependencies {
     kapt("com.google.dagger:dagger-compiler:2.48")
     implementation("com.google.dagger:dagger-android:2.48")
     kapt("com.google.dagger:dagger-android-processor:2.48")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
 }

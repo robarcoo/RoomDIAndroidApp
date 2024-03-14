@@ -6,7 +6,12 @@ import com.example.common.event.CandidateEvent
 import com.example.repository.CandidateRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import entity.Candidate
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,18 +21,40 @@ class CandidateViewModel @Inject constructor(
     private val repository: CandidateRepositoryImpl
 ) : ViewModel() {
 
-
     var _state = MutableStateFlow(CandidateState())
-
+    var candidates = MutableStateFlow(CandidateState())
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.loadCandidates().collect {
                 _state.value.candidates = it
             }
         }
     }
+
+    val state = combine(_state, candidates) {
+        state, candidates ->
+        state.copy(
+            candidates = candidates.candidates
+        )
+    }.flowOn(Dispatchers.IO).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), CandidateState())
+
     fun onEvent(event : CandidateEvent) {
         when(event) {
+            is CandidateEvent.deleteCandidate -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    repository.deleteCandidate(event.candidate)
+                    _state.update {
+                        it.copy(
+                            isAddingCandidate = false,
+                            emptyList(),
+                            candidateInfo = null,
+                            emptyList(),
+                            emptyList(),
+                            freeForm = ""
+                        )
+                    }
+                }
+            }
             CandidateEvent.HideDialog -> {
                 _state.update { it.copy(
                     isAddingCandidate = false
@@ -39,10 +66,10 @@ class CandidateViewModel @Inject constructor(
                 )}
             }
             CandidateEvent.SaveCandidate -> {
-                val candidateInfo = _state.value.candidateInfo
-                val education = _state.value.education
-                val experience = _state.value.experience
-                val freeForm = _state.value.freeForm
+                val candidateInfo = state.value.candidateInfo
+                val education = state.value.education
+                val experience = state.value.experience
+                val freeForm = state.value.freeForm
 
                 if (candidateInfo == null || education?.isEmpty() == true || experience?.isEmpty() == true || freeForm?.isBlank() == true) {
                     return
@@ -68,11 +95,7 @@ class CandidateViewModel @Inject constructor(
                     freeForm = ""
                 )}
             }
-            is CandidateEvent.deleteCandidate -> {
-                viewModelScope.launch {
-                    repository.deleteCandidate(event.candidate)
-                }
-            }
+
             is CandidateEvent.setCandidateInfo -> {
                 _state.update { it.copy (
                     candidateInfo = event.candidateInfo

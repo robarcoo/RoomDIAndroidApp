@@ -10,7 +10,9 @@ import javax.inject.Inject
 
 interface CandidateRepository {
 
+
     suspend fun loadCandidates() : Flow<List<Candidate>>
+
 
     suspend fun insertCandidate(candidate : Candidate)
 
@@ -20,11 +22,12 @@ interface CandidateRepository {
 class CandidateRepositoryImpl @Inject constructor(private val dao : CandidateDao, private val network: Network) :
     CandidateRepository {
     override suspend fun loadCandidates() : Flow<List<Candidate>> {
-        val companyApi = network.getRetrofit().create(CandidateApi::class.java)
-        companyApi.getAllCandidates().forEach {
-            dao.insertCandidate(it)
-        }
+        val candidateApi : CandidateApi = network.getRetrofit().create(CandidateApi::class.java)
+        val candidates = candidateApi.getAllCandidates()
 
+        candidates.forEach {
+                dao.insertCandidate(it)
+        }
         return dao.getCandidates()
     }
 
