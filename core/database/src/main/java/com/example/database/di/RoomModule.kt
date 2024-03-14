@@ -2,14 +2,16 @@ package com.example.database.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.database.dao.CandidateDao
 import com.example.database.database.CandidateDatabase
+import com.example.model.Network
+import com.example.repository.CandidateRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ViewModelScoped
+import dao.CandidateDao
 
 
 @Module
@@ -30,5 +32,13 @@ object RoomModule {
     fun provideDao(database : CandidateDatabase) : CandidateDao {
         return database.candidateDao()
     }
+
+    @ViewModelScoped
+    @Provides
+    fun provideRepository(candidate: CandidateDao, network: Network) : CandidateRepositoryImpl {
+        return CandidateRepositoryImpl(candidate, network)
+    }
+
+
 
 }

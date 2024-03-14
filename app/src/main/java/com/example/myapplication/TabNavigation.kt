@@ -42,7 +42,7 @@ fun TabRowScreen(state: CandidateState,
         when (tabIndex) {
             0 -> CompaniesScreen(network)
             1 -> VacanciesScreen(network)
-            2 -> CandidateScreen(state, onEvent, network)
+            2 -> CandidateScreen(state, onEvent)
         }
     }
 }

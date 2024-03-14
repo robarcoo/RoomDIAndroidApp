@@ -6,7 +6,7 @@ data class FullVacancy (
     val name: String = "",
     val level:String = "",
     val salary: Int = 0,
-    val companyid : Int = 0,
+    val company_id : Int = 0,
     val company: String = "",
     val field: String = "",
     val description: String = "",

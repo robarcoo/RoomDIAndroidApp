@@ -45,6 +45,12 @@ dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
+    implementation(project(":core:network:di"))
+    implementation(project(":core:data:repository"))
+    implementation(project(":core:network:model"))
+    implementation("androidx.compose.ui:ui-graphics-android:1.6.3")
+    implementation(project(":core:network:retrofit"))
+    implementation("com.google.ai.client.generativeai:generativeai:0.2.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -58,5 +64,9 @@ dependencies {
     implementation("com.google.dagger:dagger-android:2.48")
     kapt("com.google.dagger:dagger-android-processor:2.48")
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
 
 }

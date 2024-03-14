@@ -1,12 +1,12 @@
 package com.example.database.converter
 
 import androidx.room.TypeConverter
-import com.example.database.entity.CandidateInfo
-import com.example.database.entity.Contact
-import com.example.database.entity.Education
-import com.example.database.entity.Experience
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import entity.CandidateInfo
+import entity.Contact
+import entity.Education
+import entity.Experience
 
 class CandidateConverter {
 

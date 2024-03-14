@@ -95,6 +95,8 @@ dependencies {
     implementation(project(":feature:companies"))
     implementation(project(":feature:vacancies"))
     implementation(project(":feature:candidate"))
+    implementation(project(":core:data:repository"))
+    implementation(project(":core:network:di"))
     implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")

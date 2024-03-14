@@ -76,7 +76,7 @@ fun CompanyDialog(network: Network, id : Int) {
         companyDetails.vacancies.forEach { vacancy ->
             var showVacancy by remember { mutableStateOf(false) }
             ClickableText(
-                text = AnnotatedString(vacancy.profession),
+                text = AnnotatedString(vacancy.name),
                 onClick = {
                     showVacancy = true
                 }
@@ -124,7 +124,7 @@ fun VacancyDialog(network: Network, id : Int) {
             }
         )
         if (showCompany) {
-            showCompany  = fullScreenDialog(screenType = 1, network = network, id = vacancyDetails.companyid)
+            showCompany  = fullScreenDialog(screenType = 1, network = network, id = vacancyDetails.company_id)
         }
         Text("Call now: ${vacancyDetails.phone}")
     }

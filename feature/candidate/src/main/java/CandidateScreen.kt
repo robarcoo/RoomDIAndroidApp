@@ -14,27 +14,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.common.dialog.CandidateDialog
 import com.example.common.event.CandidateEvent
 import com.example.common.viewmodel.CandidateState
-import com.example.model.Network
-import com.example.repository.CandidateRepositoryImpl
 
 @Composable
-fun CandidateScreen(state: CandidateState, onEvent: (CandidateEvent) -> Unit, network: Network) {
-    LaunchedEffect(state) {
-         val repository = CandidateRepositoryImpl(network).loadFromServer()
-         repository.forEach {
-             onEvent(CandidateEvent.setCandidateInfo(it.candidateInfo))
-             onEvent(CandidateEvent.setEducation(it.education))
-             onEvent(CandidateEvent.setExperience(it.experience))
-             onEvent(CandidateEvent.setFreeForm(it.freeForm))
-             onEvent(CandidateEvent.SaveCandidate)
-         }
-    }
+fun CandidateScreen(state: CandidateState, onEvent: (CandidateEvent) -> Unit) {
         Scaffold (floatingActionButton = {
             FloatingActionButton(onClick = { onEvent(CandidateEvent.OpenDialog) }) {
                Icon(
@@ -44,6 +31,11 @@ fun CandidateScreen(state: CandidateState, onEvent: (CandidateEvent) -> Unit, ne
             }
 
         }) { padding ->
+
+            if (state.isAddingCandidate) {
+                CandidateDialog(state = state, onEvent = onEvent)
+            }
+
             LazyColumn(contentPadding = padding,
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -54,16 +46,16 @@ fun CandidateScreen(state: CandidateState, onEvent: (CandidateEvent) -> Unit, ne
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = "${candidate.candidateInfo}"
+                                text = "${candidate.candidate_info}"
                             )
                             Text(
                                 text = "${candidate.education}"
                             )
                             Text(
-                                text = "${candidate.experience}"
+                                text = "${candidate.job_experience}"
                             )
                             Text(
-                                text = candidate.freeForm
+                                text = "${candidate.free_form}"
                             )
                         }
                     }

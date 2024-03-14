@@ -1,10 +1,10 @@
-package com.example.database.dao
+package dao
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
-import com.example.database.entity.Candidate
+import entity.Candidate
 import kotlinx.coroutines.flow.Flow
 
 @Dao

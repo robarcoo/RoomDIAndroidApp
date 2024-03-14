@@ -21,15 +21,15 @@ fun CandidateDialog(state: CandidateState,
     text = {
         Column(verticalArrangement = Arrangement.SpaceEvenly) {
             TextField(
-                value = state.candidateInfo.toString(),
-                onValueChange = { onEvent(CandidateEvent.setCandidateInfo(state.candidateInfo!!))
+                value = "${state.candidateInfo}",
+                onValueChange = { onEvent(CandidateEvent.setCandidateInfo(state.candidateInfo))
                 },
                 placeholder = {
                     Text(text = "Candidate Info Input")
                 }
             )
             TextField(
-                value = state.education.toString(),
+                value = "${state.education}",
                 onValueChange = { onEvent(CandidateEvent.setEducation(state.education))
                 },
                 placeholder = {
@@ -37,7 +37,7 @@ fun CandidateDialog(state: CandidateState,
                 }
             )
             TextField(
-                value = state.experience.toString(),
+                value = "${state.experience}",
                 onValueChange = { onEvent(CandidateEvent.setExperience(state.experience))
                 },
                 placeholder = {
@@ -45,7 +45,7 @@ fun CandidateDialog(state: CandidateState,
                 }
             )
             TextField(
-                value = state.freeForm,
+                value = "${state.freeForm}",
                 onValueChange = { onEvent(CandidateEvent.setFreeForm(it))
                 },
                 placeholder = {

@@ -3,12 +3,9 @@ package com.example.common.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.common.event.CandidateEvent
-import com.example.database.dao.CandidateDao
-import com.example.database.entity.Candidate
-import com.example.model.Network
-import com.example.repository.CandidateRepository
 import com.example.repository.CandidateRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import entity.Candidate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -16,13 +13,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CandidateViewModel @Inject constructor(
-    private val repository: CandidateDao
+    private val repository: CandidateRepositoryImpl
 ) : ViewModel() {
 
 
-    val _state = MutableStateFlow(CandidateState())
+    var _state = MutableStateFlow(CandidateState())
 
-
+    init {
+        viewModelScope.launch {
+            repository.loadCandidates().collect {
+                _state.value.candidates = it
+            }
+        }
+    }
     fun onEvent(event : CandidateEvent) {
         when(event) {
             CandidateEvent.HideDialog -> {
@@ -41,15 +44,15 @@ class CandidateViewModel @Inject constructor(
                 val experience = _state.value.experience
                 val freeForm = _state.value.freeForm
 
-                if (candidateInfo == null || education.isEmpty() || experience.isEmpty() || freeForm.isBlank()) {
+                if (candidateInfo == null || education?.isEmpty() == true || experience?.isEmpty() == true || freeForm?.isBlank() == true) {
                     return
                 }
 
                 val candidate = Candidate(
-                    candidateInfo = candidateInfo,
+                    candidate_info = candidateInfo,
                     education = education,
-                    experience = experience,
-                    freeForm = freeForm
+                    job_experience = experience,
+                    free_form = freeForm
                 )
 
                 viewModelScope.launch {

@@ -1,6 +1,6 @@
 package com.example.retrofit
 
-import com.example.database.entity.Candidate
+import entity.Candidate
 import retrofit2.http.GET
 import retrofit2.http.Path
 

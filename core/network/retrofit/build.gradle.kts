@@ -40,6 +40,5 @@ android {
 dependencies {
     implementation(project(":core:network:model"))
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation(project(":core:database"))
 
 }

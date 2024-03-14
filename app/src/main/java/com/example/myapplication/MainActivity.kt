@@ -23,9 +23,10 @@ class MyApplication : Application() {
     @AndroidEntryPoint
     class MainActivity : ComponentActivity() {
 
-        private val viewModel: CandidateViewModel by viewModels()
+
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
+            val viewModel: CandidateViewModel by viewModels()
             setContent {
                 MyApplicationTheme {
                     // A surface container using the 'background' color from the theme

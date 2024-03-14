@@ -4,12 +4,12 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.database.converter.CandidateConverter
-import com.example.database.dao.CandidateDao
-import com.example.database.entity.Candidate
-import com.example.database.entity.CandidateInfo
-import com.example.database.entity.Contact
-import com.example.database.entity.Education
-import com.example.database.entity.Experience
+import dao.CandidateDao
+import entity.Candidate
+import entity.CandidateInfo
+import entity.Contact
+import entity.Education
+import entity.Experience
 
 @Database(entities = [Candidate::class,
     CandidateInfo::class,
