@@ -12,7 +12,7 @@ data class Education(
     @ColumnInfo(name="year_start")
     val year_start: String?,
     @ColumnInfo(name="year_finish")
-    val year_finish: String?,
+    val year_end: String?,
     val description: String?,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0

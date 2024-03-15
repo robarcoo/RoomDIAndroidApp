@@ -25,9 +25,16 @@ class CandidateViewModel @Inject constructor(
     var candidates = MutableStateFlow(CandidateState())
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.loadCandidates().collect {
-                _state.value.candidates = it
-            }
+            try {
+                repository.loadCandidates().collect {
+                    _state.value.candidates = it
+                }
+            } catch (e : Exception) {
+                repository.loadCandidatesOffline().collect {
+                    _state.value.candidates = it
+                }
+
+        }
         }
     }
 
@@ -41,19 +48,22 @@ class CandidateViewModel @Inject constructor(
     fun onEvent(event : CandidateEvent) {
         when(event) {
             is CandidateEvent.deleteCandidate -> {
-                viewModelScope.launch(Dispatchers.IO) {
-                    repository.deleteCandidate(event.candidate)
-                    _state.update {
-                        it.copy(
-                            isAddingCandidate = false,
-                            emptyList(),
-                            candidateInfo = null,
-                            emptyList(),
-                            emptyList(),
-                            freeForm = ""
-                        )
+                    viewModelScope.launch(Dispatchers.IO) {
+                        val success = repository.deleteCandidate(event.candidate)
+                        if (success) {
+                            _state.update {
+                                it.copy(
+                                    isAddingCandidate = false,
+                                    emptyList(),
+                                    candidateInfo = null,
+                                    emptyList(),
+                                    emptyList(),
+                                    freeForm = ""
+                                )
+                            }
+
+                        }
                     }
-                }
             }
             CandidateEvent.HideDialog -> {
                 _state.update { it.copy(

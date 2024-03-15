@@ -35,8 +35,8 @@ object RoomModule {
 
     @ViewModelScoped
     @Provides
-    fun provideRepository(candidate: CandidateDao, network: Network) : CandidateRepositoryImpl {
-        return CandidateRepositoryImpl(candidate, network)
+    fun provideRepository(candidate: CandidateDao, network: Network, @ApplicationContext context: Context) : CandidateRepositoryImpl {
+        return CandidateRepositoryImpl(candidate, network, context)
     }
 
 
