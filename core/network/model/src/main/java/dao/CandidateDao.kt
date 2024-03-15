@@ -24,4 +24,7 @@ interface CandidateDao {
 
     @Query("SELECT * FROM Candidate WHERE Candidate.id == (:id)")
     fun getCandidate(id: Int) : Flow<Candidate?>
+
+    @Query("SELECT id FROM Candidate ORDER BY id DESC LIMIT 1")
+    fun getLastId() : Flow<Long>
 }

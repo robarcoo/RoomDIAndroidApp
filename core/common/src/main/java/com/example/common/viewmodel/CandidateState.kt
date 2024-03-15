@@ -1,15 +1,30 @@
 package com.example.common.viewmodel
 
 import entity.Candidate
-import entity.CandidateInfo
 import entity.Education
 import entity.Experience
 
 data class CandidateState(
     val isAddingCandidate: Boolean = false,
+    val isAddingEducation: Boolean = false,
+    val isAddingExperience: Boolean = false,
     var candidates: List<Candidate> = emptyList(),
-    val candidateInfo: CandidateInfo? = null,
-    val education: List<Education?>? = emptyList(),
-    val experience: List<Experience?>? = emptyList(),
+    var name : String? = "",
+    var profession: String? = "",
+    var sex: String? = "",
+    var dateBirth: String? = "",
+    var email : String? = "",
+    var phone: String? = "",
+    var relocation: String? = "",
+    val education: MutableList<Education?>? = mutableListOf(),
+    var type : String? = "",
+    var educationYearStart : String? = "",
+    var educationYearEnd: String? = "",
+    var educationDescription: String? = "",
+    val experience: MutableList<Experience?>? = mutableListOf(),
+    var company: String? = "",
+    var jobYearStart: String? = "",
+    var jobYearEnd: String? = "",
+    var jobDescription: String? = "",
     var freeForm: String? = ""
     )

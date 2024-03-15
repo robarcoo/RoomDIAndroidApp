@@ -21,6 +21,8 @@ suspend fun loadCandidatesOffline(): Flow<List<Candidate>>
     suspend fun insertCandidate(candidate : Candidate)
 
     suspend fun deleteCandidate(candidate : Candidate) : Boolean
+
+    suspend fun getLastId() : Flow<Long>
 }
 
 class CandidateRepositoryImpl @Inject constructor(private val dao : CandidateDao, private val network: Network, private val context : Context) :
@@ -37,6 +39,10 @@ class CandidateRepositoryImpl @Inject constructor(private val dao : CandidateDao
 
     override suspend fun loadCandidatesOffline() : Flow<List<Candidate>> {
         return dao.getCandidates()
+    }
+
+    override suspend fun getLastId(): Flow<Long> {
+        return dao.getLastId()
     }
 
     override suspend fun deleteCandidate(candidate : Candidate) : Boolean {

@@ -6,6 +6,10 @@ import com.example.common.event.CandidateEvent
 import com.example.repository.CandidateRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import entity.Candidate
+import entity.CandidateInfo
+import entity.Contact
+import entity.Education
+import entity.Experience
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -45,6 +49,41 @@ class CandidateViewModel @Inject constructor(
         )
     }.flowOn(Dispatchers.IO).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), CandidateState())
 
+    fun getLastId() : Int {
+        var id = 0
+        viewModelScope.launch {
+             repository.getLastId().collect {
+                id = it.toInt()
+            }
+        }
+        return id
+    }
+    private fun cleanState(candidateState: CandidateState) : CandidateState{
+        return candidateState.copy(
+            isAddingCandidate = false,
+            isAddingEducation = false,
+            isAddingExperience = false,
+            emptyList(),
+            name = "",
+            profession = "",
+            sex = "",
+            dateBirth = "",
+            email = "",
+            phone = "",
+            relocation = "",
+            mutableListOf(),
+            type = "",
+            educationYearStart = "",
+            educationYearEnd = "",
+            educationDescription = "",
+            mutableListOf(),
+            company = "",
+            jobYearStart = "",
+            jobYearEnd = "",
+            jobDescription = "",
+            freeForm = ""
+        )
+    }
     fun onEvent(event : CandidateEvent) {
         when(event) {
             is CandidateEvent.deleteCandidate -> {
@@ -52,14 +91,7 @@ class CandidateViewModel @Inject constructor(
                         val success = repository.deleteCandidate(event.candidate)
                         if (success) {
                             _state.update {
-                                it.copy(
-                                    isAddingCandidate = false,
-                                    emptyList(),
-                                    candidateInfo = null,
-                                    emptyList(),
-                                    emptyList(),
-                                    freeForm = ""
-                                )
+                                cleanState(it)
                             }
 
                         }
@@ -75,18 +107,100 @@ class CandidateViewModel @Inject constructor(
                     isAddingCandidate = true
                 )}
             }
+
+            is CandidateEvent.saveWithChangesEducation -> {
+                val candidate_id = getLastId() + 1
+                val type = state.value.type
+                val educationStartYear = state.value.educationYearStart
+                val educationEndYear = state.value.educationYearEnd
+                val educationDescription = state.value.educationDescription
+
+                if (type == "" ||
+                    educationStartYear == "" ||
+                    educationEndYear == "" ||
+                    educationDescription == "") {
+                    return
+                }
+
+                val education = Education(candidate_id,
+                    type,
+                    educationStartYear,
+                    educationEndYear,
+                    educationDescription)
+                val newEducation = _state.value.education
+                newEducation?.add(education)
+                _state.update { candidate ->
+                    candidate.copy(
+                        education = newEducation
+                    )
+                }
+            }
+
+            is CandidateEvent.saveWithChangesExperience -> {
+                val candidate_id = getLastId() + 1
+                val company = state.value.company
+                val jobStartYear = state.value.jobYearStart
+                val jobEndYear = state.value.jobYearEnd
+                val jobDescription = state.value.jobDescription
+
+
+                if (company == "" || jobStartYear == "" ||
+                    jobEndYear == "" || jobDescription == "") {
+                    return
+                }
+
+                val jobExperience = Experience(
+                    candidate_id,
+                    company,
+                    jobStartYear,
+                    jobEndYear,
+                    jobDescription
+                )
+
+                val newJobExperience = _state.value.experience
+                newJobExperience?.add(jobExperience)
+                _state.update {
+                    job ->
+                    job.copy(
+                        experience = newJobExperience
+                    )
+                }
+
+            }
+
             CandidateEvent.SaveCandidate -> {
-                val candidateInfo = state.value.candidateInfo
+                val candidate_id = getLastId() + 1
+                val name = state.value.name
+                val sex = state.value.sex
+                val dateBirth = state.value.dateBirth
+                val profession = state.value.profession
+                val email = state.value.email
+                val phone = state.value.phone
+                val relocation = state.value.relocation
                 val education = state.value.education
                 val experience = state.value.experience
                 val freeForm = state.value.freeForm
 
-                if (candidateInfo == null || education?.isEmpty() == true || experience?.isEmpty() == true || freeForm?.isBlank() == true) {
+                if (name == "" ||
+                    sex == "" ||
+                    profession == "" ||
+                    email == "" ||
+                    phone == "" ||
+                    relocation == "" ||
+                    education?.isEmpty() == true ||
+                    experience?.isEmpty() == true ||
+                    freeForm?.isBlank() == true) {
                     return
                 }
-
                 val candidate = Candidate(
-                    candidate_info = candidateInfo,
+                    candidate_info = CandidateInfo(
+                        candidate_id = candidate_id,
+                        name = name,
+                        sex = sex,
+                        profession = profession,
+                        birth_date = dateBirth,
+                        contacts = Contact(candidate_id, phone, email),
+                        relocation = relocation),
                     education = education,
                     job_experience = experience,
                     free_form = freeForm
@@ -96,28 +210,18 @@ class CandidateViewModel @Inject constructor(
                     repository.insertCandidate(candidate)
                 }
 
-                _state.update { it.copy(
-                    isAddingCandidate = false,
-                    emptyList(),
-                    candidateInfo = null,
-                    emptyList(),
-                    emptyList(),
-                    freeForm = ""
-                )}
-            }
-
-            is CandidateEvent.setCandidateInfo -> {
-                _state.update { it.copy (
-                    candidateInfo = event.candidateInfo
-                )
+                _state.update {
+                    cleanState(it)
                 }
             }
-            is CandidateEvent.setEducation -> {
+
+
+            is CandidateEvent.saveWithoutChangesEducation -> {
                 _state.update { it.copy (
                     education = event.education
                 ) }
             }
-            is CandidateEvent.setExperience -> {
+            is CandidateEvent.saveWithoutChangesExperience -> {
                 _state.update { it.copy (
                     experience = event.experience
                 )}
@@ -126,6 +230,125 @@ class CandidateViewModel @Inject constructor(
                 _state.update { it.copy (
                     freeForm = event.freeForm
                 )}
+            }
+
+            is CandidateEvent.SetName -> {
+                _state.update { it.copy (
+                    name = event.name
+                )
+                }
+            }
+
+            is CandidateEvent.SetDateOfBirth -> {
+                _state.update {
+                    it.copy(
+                        dateBirth = event.date
+                    )
+                }
+            }
+
+            is CandidateEvent.SetProfession -> {
+                _state.update {
+                    it.copy(
+                        profession = event.profession
+                    )
+                }
+            }
+
+            is CandidateEvent.SetSex -> {
+                _state.update {
+                    it.copy(
+                        sex = event.sex
+                    )
+                }
+            }
+
+            is CandidateEvent.SetRelocation -> {
+                _state.update {
+                    it.copy(
+                        relocation = event.relocation
+                    )
+                }
+            }
+
+            is CandidateEvent.SetEmail -> {
+                _state.update {
+                    it.copy(
+                        email = event.email
+                    )
+                }
+            }
+
+            is CandidateEvent.SetPhone -> {
+                _state.update {
+                    it.copy(
+                        phone = event.phone
+                    )
+                }
+            }
+
+            is CandidateEvent.SetType -> {
+                _state.update {
+                    it.copy(
+                        type = event.type
+                    )
+                }
+            }
+
+            is CandidateEvent.SetEducationStartYear -> {
+                _state.update {
+                    it.copy(
+                        educationYearStart = event.startYear
+                    )
+                }
+            }
+
+            is CandidateEvent.SetEducationEndYear -> {
+                _state.update {
+                    it.copy(
+                        educationYearEnd = event.endYear
+                    )
+                }
+            }
+
+            is CandidateEvent.SetEducationDescription -> {
+                _state.update {
+                    it.copy(
+                        educationDescription = event.description
+                    )
+                }
+            }
+
+            is CandidateEvent.SetCompany -> {
+                _state.update {
+                    it.copy(
+                        company = event.company
+                    )
+                }
+            }
+
+            is CandidateEvent.SetJobStartYear -> {
+                _state.update {
+                    it.copy(
+                        jobYearStart = event.startYear
+                    )
+                }
+            }
+
+            is CandidateEvent.SetJobEndYear -> {
+                _state.update {
+                    it.copy(
+                        jobYearEnd = event.endYear
+                    )
+                }
+            }
+
+            is CandidateEvent.SetJobDescription -> {
+                _state.update {
+                    it.copy(
+                        jobDescription = event.description
+                    )
+                }
             }
         }
     }
