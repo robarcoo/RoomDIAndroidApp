@@ -51,7 +51,7 @@ fun CandidateScreen(state: CandidateState, onEvent: (CandidateEvent) -> Unit) {
             LazyColumn(contentPadding = padding,
                 modifier = Modifier.fillMaxSize().background(color = Color.LightGray),
                 verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    items(state.candidates, key = { it.id}) { candidate ->
+                    items(state.candidates, key = { it.id }) { candidate ->
                         Column(modifier = Modifier.padding(15.dp).background(color = Color.White, shape = RoundedCornerShape(15.dp)).border(
                             BorderStroke(1.dp, Color.DarkGray), shape = RoundedCornerShape(15.dp)
                         ).padding(15.dp))
