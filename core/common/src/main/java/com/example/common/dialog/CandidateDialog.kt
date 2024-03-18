@@ -3,6 +3,7 @@ package com.example.common.dialog
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -15,8 +16,14 @@ fun CandidateDialog(state: CandidateState,
                     onEvent: (CandidateEvent) -> Unit,
                     modifier: Modifier = Modifier
     ) {
-    AlertDialog(modifier = modifier, onDismissRequest = { onEvent(CandidateEvent.HideDialog) }, confirmButton = { onEvent(
-        CandidateEvent.SaveCandidate) },
+    AlertDialog(modifier = modifier, onDismissRequest = { CandidateEvent.HideDialog },
+        dismissButton = {
+        Button( onClick = {
+        onEvent(CandidateEvent.HideDialog) }) {
+            Text(text = "Cancel") }
+                                                        },
+        confirmButton = { Button( onClick = { onEvent(
+        CandidateEvent.SaveCandidate) }) { Text (text = "Save Resume")} },
         title = { Text(text = "Edit candidate")},
     text = {
         Column(verticalArrangement = Arrangement.SpaceEvenly) {
@@ -76,32 +83,82 @@ fun CandidateDialog(state: CandidateState,
                     Text(text = "Relocation")
                 }
             )
-            TextField(
-                value = "${state.education}",
-                onValueChange = { onEvent(CandidateEvent.saveWithoutChangesEducation(state.education))
-                },
-                placeholder = {
-                    Text(text = "Candidate Info Input")
+            state.education?.forEach {
+                it?.let { education ->
+                    TextField(
+                        value = "${ education.type}",
+                        onValueChange = { onEvent(CandidateEvent.SetType(education.type)) },
+                        placeholder = {
+                            Text(text = "Education Type")
+                        }
+                    )
+                    TextField(
+                        value = "${education.year_start}",
+                        onValueChange = { onEvent(CandidateEvent.SetType(education.year_start)) },
+                        placeholder = {
+                            Text(text = "Education Year Start")
+                        }
+                    )
+                    TextField(
+                        value = "${education.year_end}",
+                        onValueChange = { onEvent(CandidateEvent.SetType(education.year_end)) },
+                        placeholder = {
+                            Text(text = "Education Year End")
+                        }
+                    )
+                    TextField(
+                        value = "${education.description}",
+                        onValueChange = { onEvent(CandidateEvent.SetType(education.description)) },
+                        placeholder = {
+                            Text(text = "Education Description")
+                        }
+                    )
                 }
-            )
-            TextField(
-                value = "${state.experience}",
-                onValueChange = { onEvent(CandidateEvent.saveWithoutChangesExperience(state.experience))
-                },
-                placeholder = {
-                    Text(text = "Candidate Info Input")
+            }
+
+            state.experience?.forEach {
+                it?.let { experience ->
+                    TextField(
+                        value = "${ experience.company_name}",
+                        onValueChange = { onEvent(CandidateEvent.SetType(experience.company_name)) },
+                        placeholder = {
+                            Text(text = "Company Name")
+                        }
+                    )
+                    TextField(
+                        value = "${experience.date_start}",
+                        onValueChange = { onEvent(CandidateEvent.SetType(experience.date_start)) },
+                        placeholder = {
+                            Text(text = "Started Working at Company")
+                        }
+                    )
+                    TextField(
+                        value = "${experience.date_end}",
+                        onValueChange = { onEvent(CandidateEvent.SetType(experience.date_end)) },
+                        placeholder = {
+                            Text(text = "Finished Working at Company")
+                        }
+                    )
+                    TextField(
+                        value = "${experience.description}",
+                        onValueChange = { onEvent(CandidateEvent.SetType(experience.description)) },
+                        placeholder = {
+                            Text(text = "Former Job Description")
+                        }
+                    )
                 }
-            )
+            }
             TextField(
                 value = "${state.freeForm}",
                 onValueChange = { onEvent(CandidateEvent.setFreeForm(it))
                 },
                 placeholder = {
-                    Text(text = "Candidate Info Input")
+                    Text(text = "Free Form")
                 }
             )
         }
-    }
+    },
+
     )
 
 }
