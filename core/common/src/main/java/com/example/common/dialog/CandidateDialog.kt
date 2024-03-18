@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.common.event.CandidateEvent
 import com.example.common.viewmodel.CandidateState
+import entity.Education
+import entity.Experience
 
 @Composable
 fun CandidateDialog(state: CandidateState,
@@ -37,7 +39,7 @@ fun CandidateDialog(state: CandidateState,
             )
             TextField(
                 value = "${state.profession}",
-                onValueChange = { onEvent(CandidateEvent.SetName(state.profession))
+                onValueChange = { onEvent(CandidateEvent.SetProfession(state.profession))
                 },
                 placeholder = {
                     Text(text = "Profession")
@@ -45,7 +47,7 @@ fun CandidateDialog(state: CandidateState,
             )
             TextField(
                 value = "${state.sex}",
-                onValueChange = { onEvent(CandidateEvent.SetName(state.sex))
+                onValueChange = { onEvent(CandidateEvent.SetSex(state.sex))
                 },
                 placeholder = {
                     Text(text = "Sex")
@@ -53,7 +55,7 @@ fun CandidateDialog(state: CandidateState,
             )
             TextField(
                 value = "${state.dateBirth}",
-                onValueChange = { onEvent(CandidateEvent.SetName(state.dateBirth))
+                onValueChange = { onEvent(CandidateEvent.SetDateOfBirth(state.dateBirth))
                 },
                 placeholder = {
                     Text(text = "Date of Birth")
@@ -61,7 +63,7 @@ fun CandidateDialog(state: CandidateState,
             )
             TextField(
                 value = "${state.phone}",
-                onValueChange = { onEvent(CandidateEvent.SetName(state.phone))
+                onValueChange = { onEvent(CandidateEvent.SetPhone(state.phone))
                 },
                 placeholder = {
                     Text(text = "Phone")
@@ -69,7 +71,7 @@ fun CandidateDialog(state: CandidateState,
             )
             TextField(
                 value = "${state.email}",
-                onValueChange = { onEvent(CandidateEvent.SetName(state.email))
+                onValueChange = { onEvent(CandidateEvent.SetEmail(state.email))
                 },
                 placeholder = {
                     Text(text = "Email")
@@ -77,7 +79,7 @@ fun CandidateDialog(state: CandidateState,
             )
             TextField(
                 value = "${state.relocation}",
-                onValueChange = { onEvent(CandidateEvent.SetName(state.relocation))
+                onValueChange = { onEvent(CandidateEvent.SetRelocation(state.relocation))
                 },
                 placeholder = {
                     Text(text = "Relocation")
@@ -94,59 +96,65 @@ fun CandidateDialog(state: CandidateState,
                     )
                     TextField(
                         value = "${education.year_start}",
-                        onValueChange = { onEvent(CandidateEvent.SetType(education.year_start)) },
+                        onValueChange = { onEvent(CandidateEvent.SetEducationStartYear(education.year_start)) },
                         placeholder = {
                             Text(text = "Education Year Start")
                         }
                     )
                     TextField(
                         value = "${education.year_end}",
-                        onValueChange = { onEvent(CandidateEvent.SetType(education.year_end)) },
+                        onValueChange = { onEvent(CandidateEvent.SetEducationEndYear(education.year_end)) },
                         placeholder = {
                             Text(text = "Education Year End")
                         }
                     )
                     TextField(
                         value = "${education.description}",
-                        onValueChange = { onEvent(CandidateEvent.SetType(education.description)) },
+                        onValueChange = { onEvent(CandidateEvent.SetEducationDescription(education.description)) },
                         placeholder = {
                             Text(text = "Education Description")
                         }
                     )
                 }
             }
+            Button(onClick = { state.education?.add(Education(state.id, "", "", "", ""))}) {
+                Text("Add Education")
+            }
 
             state.experience?.forEach {
                 it?.let { experience ->
                     TextField(
                         value = "${ experience.company_name}",
-                        onValueChange = { onEvent(CandidateEvent.SetType(experience.company_name)) },
+                        onValueChange = { onEvent(CandidateEvent.SetCompany(experience.company_name)) },
                         placeholder = {
                             Text(text = "Company Name")
                         }
                     )
                     TextField(
                         value = "${experience.date_start}",
-                        onValueChange = { onEvent(CandidateEvent.SetType(experience.date_start)) },
+                        onValueChange = { onEvent(CandidateEvent.SetJobStartYear(experience.date_start)) },
                         placeholder = {
                             Text(text = "Started Working at Company")
                         }
                     )
                     TextField(
                         value = "${experience.date_end}",
-                        onValueChange = { onEvent(CandidateEvent.SetType(experience.date_end)) },
+                        onValueChange = { onEvent(CandidateEvent.SetJobEndYear(experience.date_end)) },
                         placeholder = {
                             Text(text = "Finished Working at Company")
                         }
                     )
                     TextField(
                         value = "${experience.description}",
-                        onValueChange = { onEvent(CandidateEvent.SetType(experience.description)) },
+                        onValueChange = { onEvent(CandidateEvent.SetJobDescription(experience.description)) },
                         placeholder = {
                             Text(text = "Former Job Description")
                         }
                     )
                 }
+            }
+            Button(onClick = { state.experience?.add(Experience(state.id, "", "", "", ""))}) {
+                Text("Add Job Experience")
             }
             TextField(
                 value = "${state.freeForm}",

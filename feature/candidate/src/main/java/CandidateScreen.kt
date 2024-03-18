@@ -36,7 +36,7 @@ import com.example.common.viewmodel.CandidateState
 @Composable
 fun CandidateScreen(state: CandidateState, onEvent: (CandidateEvent) -> Unit) {
         Scaffold (floatingActionButton = {
-            FloatingActionButton(onClick = { onEvent(CandidateEvent.OpenDialog) }) {
+            FloatingActionButton(onClick = { onEvent(CandidateEvent.NewCandidate) }) {
                Icon(
                    imageVector = Icons.Default.Add,
                    contentDescription = "Create Resume"
@@ -62,7 +62,7 @@ fun CandidateScreen(state: CandidateState, onEvent: (CandidateEvent) -> Unit) {
                             ) {
                                 Text(text = "Resume", fontWeight = FontWeight.Bold)
                                 Spacer(Modifier.weight(1f))
-                                IconButton(onClick = { onEvent(CandidateEvent.OpenDialog) })
+                                IconButton(onClick = { onEvent(CandidateEvent.EditCandidate(candidate)) })
                                 {
                                     Icon(
                                         imageVector = Icons.Default.Edit,

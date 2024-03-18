@@ -49,7 +49,7 @@ class CandidateViewModel @Inject constructor(
         )
     }.flowOn(Dispatchers.IO).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), CandidateState())
 
-    fun getLastId() : Int {
+    private fun getLastId() : Int {
         var id = 0
         viewModelScope.launch {
              repository.getLastId().collect {
@@ -60,7 +60,9 @@ class CandidateViewModel @Inject constructor(
     }
     private fun cleanState(candidateState: CandidateState) : CandidateState{
         return candidateState.copy(
+            0,
             isAddingCandidate = false,
+            isEditingCandidate = false,
             isAddingEducation = false,
             isAddingExperience = false,
             emptyList(),
@@ -99,12 +101,34 @@ class CandidateViewModel @Inject constructor(
             }
             CandidateEvent.HideDialog -> {
                 _state.update { it.copy(
-                    isAddingCandidate = false
+                    isAddingCandidate = false,
+                    isEditingCandidate = false
                 )}
             }
-            CandidateEvent.OpenDialog -> {
+            CandidateEvent.NewCandidate -> {
                 _state.update { it.copy(
+                    id = getLastId() + 1,
                     isAddingCandidate = true
+                )}
+            }
+            is CandidateEvent.EditCandidate -> {
+                _state.update { it.copy(
+                    event.candidate.id,
+                    isAddingCandidate = false,
+                    isEditingCandidate = true,
+                    isAddingEducation = false,
+                    isAddingExperience = false,
+                    emptyList(),
+                    name = event.candidate.candidate_info?.name,
+                    profession = event.candidate.candidate_info?.profession,
+                    sex = event.candidate.candidate_info?.sex,
+                    dateBirth = event.candidate.candidate_info?.birth_date,
+                    email = event.candidate.candidate_info?.contacts?.email,
+                    phone = event.candidate.candidate_info?.contacts?.phone,
+                    relocation = event.candidate.candidate_info?.relocation,
+                    education = event.candidate.education?.toMutableList(),
+                    experience = event.candidate.job_experience?.toMutableList(),
+                    freeForm = event.candidate.free_form
                 )}
             }
 

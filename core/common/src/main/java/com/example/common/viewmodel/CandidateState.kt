@@ -5,7 +5,9 @@ import entity.Education
 import entity.Experience
 
 data class CandidateState(
+    val id: Int = 0,
     val isAddingCandidate: Boolean = false,
+    val isEditingCandidate: Boolean = false,
     val isAddingEducation: Boolean = false,
     val isAddingExperience: Boolean = false,
     var candidates: List<Candidate> = emptyList(),

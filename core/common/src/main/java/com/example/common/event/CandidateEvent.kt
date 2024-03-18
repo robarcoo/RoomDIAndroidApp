@@ -34,7 +34,9 @@ sealed interface CandidateEvent {
         CandidateEvent
     data class setFreeForm(val freeForm: String?) : CandidateEvent
     data object HideDialog: CandidateEvent
-    data object OpenDialog: CandidateEvent
+    data object NewCandidate: CandidateEvent
+
+    data class EditCandidate(val candidate: Candidate): CandidateEvent
     data class deleteCandidate(val candidate: Candidate) :
         CandidateEvent
 }
