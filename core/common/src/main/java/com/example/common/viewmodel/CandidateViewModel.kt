@@ -1,5 +1,6 @@
 package com.example.common.viewmodel
 
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.common.event.CandidateEvent
@@ -73,12 +74,12 @@ class CandidateViewModel @Inject constructor(
             email = "",
             phone = "",
             relocation = "",
-            mutableListOf(),
+            SnapshotStateList(),
             type = "",
             educationYearStart = "",
             educationYearEnd = "",
             educationDescription = "",
-            mutableListOf(),
+            SnapshotStateList(),
             company = "",
             jobYearStart = "",
             jobYearEnd = "",
@@ -133,7 +134,7 @@ class CandidateViewModel @Inject constructor(
             }
 
             is CandidateEvent.saveWithChangesEducation -> {
-                val candidate_id = getLastId() + 1
+                val candidate_id = state.value.id
                 val type = state.value.type
                 val educationStartYear = state.value.educationYearStart
                 val educationEndYear = state.value.educationYearEnd
@@ -161,7 +162,7 @@ class CandidateViewModel @Inject constructor(
             }
 
             is CandidateEvent.saveWithChangesExperience -> {
-                val candidate_id = getLastId() + 1
+                val candidate_id = state.value.id
                 val company = state.value.company
                 val jobStartYear = state.value.jobYearStart
                 val jobEndYear = state.value.jobYearEnd
@@ -193,7 +194,7 @@ class CandidateViewModel @Inject constructor(
             }
 
             CandidateEvent.SaveCandidate -> {
-                val candidate_id = getLastId() + 1
+                val candidate_id = state.value.id
                 val name = state.value.name
                 val sex = state.value.sex
                 val dateBirth = state.value.dateBirth

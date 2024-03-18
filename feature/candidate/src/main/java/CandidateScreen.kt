@@ -45,7 +45,7 @@ fun CandidateScreen(state: CandidateState, onEvent: (CandidateEvent) -> Unit) {
 
         }) { padding ->
 
-            if (state.isAddingCandidate) {
+            if (state.isAddingCandidate || state.isEditingCandidate) {
                 CandidateDialog(state = state, onEvent = onEvent)
             }
             LazyColumn(contentPadding = padding,

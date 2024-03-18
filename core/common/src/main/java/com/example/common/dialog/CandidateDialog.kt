@@ -2,12 +2,17 @@ package com.example.common.dialog
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.example.common.event.CandidateEvent
 import com.example.common.viewmodel.CandidateState
 import entity.Education
@@ -28,7 +33,7 @@ fun CandidateDialog(state: CandidateState,
         CandidateEvent.SaveCandidate) }) { Text (text = "Save Resume")} },
         title = { Text(text = "Edit candidate")},
     text = {
-        Column(verticalArrangement = Arrangement.SpaceEvenly) {
+        Column(verticalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.verticalScroll(rememberScrollState())) {
             TextField(
                 value = "${state.name}",
                 onValueChange = { onEvent(CandidateEvent.SetName(state.name))
@@ -87,6 +92,7 @@ fun CandidateDialog(state: CandidateState,
             )
             state.education?.forEach {
                 it?.let { education ->
+                    Spacer(modifier = Modifier.size(15.dp))
                     TextField(
                         value = "${ education.type}",
                         onValueChange = { onEvent(CandidateEvent.SetType(education.type)) },
@@ -115,6 +121,7 @@ fun CandidateDialog(state: CandidateState,
                             Text(text = "Education Description")
                         }
                     )
+                    Spacer(modifier = Modifier.size(15.dp))
                 }
             }
             Button(onClick = { state.education?.add(Education(state.id, "", "", "", ""))}) {
@@ -123,6 +130,7 @@ fun CandidateDialog(state: CandidateState,
 
             state.experience?.forEach {
                 it?.let { experience ->
+                    Spacer(modifier = Modifier.size(15.dp))
                     TextField(
                         value = "${ experience.company_name}",
                         onValueChange = { onEvent(CandidateEvent.SetCompany(experience.company_name)) },
@@ -151,6 +159,7 @@ fun CandidateDialog(state: CandidateState,
                             Text(text = "Former Job Description")
                         }
                     )
+                    Spacer(modifier = Modifier.size(15.dp))
                 }
             }
             Button(onClick = { state.experience?.add(Experience(state.id, "", "", "", ""))}) {
