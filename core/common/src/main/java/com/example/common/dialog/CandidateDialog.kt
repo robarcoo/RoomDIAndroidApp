@@ -91,7 +91,7 @@ fun CandidateDialog(state: CandidateState,
                 }
             )
             var educationCount = -1
-            state.education?.forEach {
+            state.education.forEach {
                 it.let { education ->
                     educationCount++
                     Spacer(modifier = Modifier.size(15.dp))
@@ -104,21 +104,21 @@ fun CandidateDialog(state: CandidateState,
                     )
                     TextField(
                         value = "${education.year_start}",
-                        onValueChange = { str -> onEvent(CandidateEvent.SetEducationStartYear(str)) },
+                        onValueChange = { str -> onEvent(CandidateEvent.SetEducationStartYear(str, educationCount)) },
                         placeholder = {
                             Text(text = "Education Year Start")
                         }
                     )
                     TextField(
                         value = "${education.year_end}",
-                        onValueChange = { str -> onEvent(CandidateEvent.SetEducationEndYear(str)) },
+                        onValueChange = { str -> onEvent(CandidateEvent.SetEducationEndYear(str, educationCount)) },
                         placeholder = {
                             Text(text = "Education Year End")
                         }
                     )
                     TextField(
                         value = "${education.description}",
-                        onValueChange = { str -> onEvent(CandidateEvent.SetEducationDescription(str)) },
+                        onValueChange = { str -> onEvent(CandidateEvent.SetEducationDescription(str, educationCount)) },
                         placeholder = {
                             Text(text = "Education Description")
                         }
@@ -126,37 +126,38 @@ fun CandidateDialog(state: CandidateState,
                     Spacer(modifier = Modifier.size(15.dp))
                 }
             }
-            Button(onClick = { state.education?.add(Education(state.id, "", "", "", ""))}) {
+            Button(onClick = { state.education.add(Education(state.id, "", "", "", ""))}) {
                 Text("Add Education")
             }
-
-            state.experience?.forEach {
-                it?.let { experience ->
+            var experienceCount = -1
+            state.experience.forEach {
+                it.let { experience ->
+                    experienceCount++
                     Spacer(modifier = Modifier.size(15.dp))
                     TextField(
-                        value = "${ experience.company_name}",
-                        onValueChange = { str -> onEvent(CandidateEvent.SetCompany(str)) },
+                        value = "${experience.company_name}",
+                        onValueChange = { str -> onEvent(CandidateEvent.SetCompany(str, experienceCount)) },
                         placeholder = {
                             Text(text = "Company Name")
                         }
                     )
                     TextField(
                         value = "${experience.date_start}",
-                        onValueChange = { str -> onEvent(CandidateEvent.SetJobStartYear(str)) },
+                        onValueChange = { str -> onEvent(CandidateEvent.SetJobStartYear(str, experienceCount)) },
                         placeholder = {
                             Text(text = "Started Working at Company")
                         }
                     )
                     TextField(
                         value = "${experience.date_end}",
-                        onValueChange = { str -> onEvent(CandidateEvent.SetJobEndYear(str)) },
+                        onValueChange = { str -> onEvent(CandidateEvent.SetJobEndYear(str, experienceCount)) },
                         placeholder = {
                             Text(text = "Finished Working at Company")
                         }
                     )
                     TextField(
                         value = "${experience.description}",
-                        onValueChange = { str -> onEvent(CandidateEvent.SetJobDescription(str)) },
+                        onValueChange = { str -> onEvent(CandidateEvent.SetJobDescription(str, experienceCount)) },
                         placeholder = {
                             Text(text = "Former Job Description")
                         }
@@ -164,7 +165,7 @@ fun CandidateDialog(state: CandidateState,
                     Spacer(modifier = Modifier.size(15.dp))
                 }
             }
-            Button(onClick = { state.experience?.add(Experience(state.id, "", "", "", ""))}) {
+            Button(onClick = { state.experience.add(Experience(state.id, "", "", "", ""))}) {
                 Text("Add Job Experience")
             }
             TextField(

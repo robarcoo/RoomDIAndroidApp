@@ -328,22 +328,22 @@ class CandidateViewModel @Inject constructor(
 
             is CandidateEvent.SetCompany -> {
                 val old = _state.value.experience[event.index]
-                _state.value.experience[event.index] = Experience(old.candidate_id, event.company, old.date_start, old.date_end, old.description)
+                _state.value.experience[event.index] = Experience(old.candidate_id, old.date_start, old.date_end, event.company, old.description, old.id)
             }
 
             is CandidateEvent.SetJobStartYear -> {
                 val old = _state.value.experience[event.index]
-                _state.value.experience[event.index] = Experience(old.candidate_id, old.company_name, event.startYear, old.date_end, old.description)
+                _state.value.experience[event.index] = Experience(old.candidate_id, event.startYear, old.date_end, old.company_name, old.description, old.id)
             }
 
             is CandidateEvent.SetJobEndYear -> {
                 val old = _state.value.experience[event.index]
-                _state.value.experience[event.index] = Experience(old.candidate_id, old.company_name, old.date_start, event.endYear, old.description)
+                _state.value.experience[event.index] = Experience(old.candidate_id,  old.date_start, event.endYear, old.company_name, old.description, old.id)
             }
 
             is CandidateEvent.SetJobDescription -> {
                 val old = _state.value.experience[event.index]
-                _state.value.experience[event.index] = Experience(old.candidate_id, old.company_name, old.date_start, old.date_end, event.description)
+                _state.value.experience[event.index] = Experience(old.candidate_id,  old.date_start, old.date_end, old.company_name, event.description, old.id)
             }
         }
     }
