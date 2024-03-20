@@ -27,7 +27,7 @@ class CandidateViewModel @Inject constructor(
 ) : ViewModel() {
 
     var _state = MutableStateFlow(CandidateState())
-    var candidates = MutableStateFlow(CandidateState())
+    private var candidates = MutableStateFlow(CandidateState())
     init {
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -43,7 +43,7 @@ class CandidateViewModel @Inject constructor(
         }
     }
 
-    val state = combine(_state, candidates) {
+    private val state = combine(_state, candidates) {
         state, candidates ->
         state.copy(
             candidates = candidates.candidates
@@ -124,7 +124,7 @@ class CandidateViewModel @Inject constructor(
                     phone = event.candidate.candidate_info?.contacts?.phone,
                     relocation = event.candidate.candidate_info?.relocation,
                     education = event.candidate.education.toMutableList(),
-                    experience = event.candidate.job_experience?.toMutableList(),
+                    experience = event.candidate.job_experience.toMutableList(),
                     freeForm = event.candidate.free_form
                 )}
             }
@@ -149,7 +149,7 @@ class CandidateViewModel @Inject constructor(
                     educationEndYear,
                     educationDescription)
                 val newEducation = _state.value.education
-                newEducation?.add(education)
+                newEducation.add(education)
                 _state.update { candidate ->
                     candidate.copy(
                         education = newEducation
@@ -179,7 +179,7 @@ class CandidateViewModel @Inject constructor(
                 )
 
                 val newJobExperience = _state.value.experience
-                newJobExperience?.add(jobExperience)
+                newJobExperience.add(jobExperience)
                 _state.update {
                     job ->
                     job.copy(
@@ -207,10 +207,8 @@ class CandidateViewModel @Inject constructor(
                     profession == "" ||
                     email == "" ||
                     phone == "" ||
-                    relocation == "" ||
-                    education?.isEmpty() == true ||
-                    experience?.isEmpty() == true ||
-                    freeForm?.isBlank() == true) {
+                    relocation == "" || freeForm?.isBlank() == true
+                ) {
                     return
                 }
                 val candidate = Candidate(
@@ -309,66 +307,43 @@ class CandidateViewModel @Inject constructor(
             }
 
             is CandidateEvent.SetType -> {
-                val old = _state.value.education.get(event.index)
+                val old = _state.value.education[event.index]
                 _state.value.education[event.index] = Education(old.candidate_id, event.type, old.year_start, old.year_end, old.description, old.id)
-//                currentState.education?.get(event.index)?.type = event.type
-//                _state.value = currentState
             }
 
             is CandidateEvent.SetEducationStartYear -> {
-                _state.update {
-                    it.copy(
-                        educationYearStart = event.startYear
-                    )
-                }
+                val old = _state.value.education[event.index]
+                _state.value.education[event.index] = Education(old.candidate_id, old.type, event.startYear, old.year_end, old.description, old.id)
             }
 
             is CandidateEvent.SetEducationEndYear -> {
-                _state.update {
-                    it.copy(
-                        educationYearEnd = event.endYear
-                    )
-                }
+                val old = _state.value.education[event.index]
+                _state.value.education[event.index] = Education(old.candidate_id, old.type, old.year_start, event.endYear, old.description, old.id)
             }
 
             is CandidateEvent.SetEducationDescription -> {
-                _state.update {
-                    it.copy(
-                        educationDescription = event.description
-                    )
-                }
+                val old = _state.value.education[event.index]
+                _state.value.education[event.index] = Education(old.candidate_id, old.type, old.year_start, old.year_end, event.description, old.id)
             }
 
             is CandidateEvent.SetCompany -> {
-                _state.update {
-                    it.copy(
-                        company = event.company
-                    )
-                }
+                val old = _state.value.experience[event.index]
+                _state.value.experience[event.index] = Experience(old.candidate_id, event.company, old.date_start, old.date_end, old.description)
             }
 
             is CandidateEvent.SetJobStartYear -> {
-                _state.update {
-                    it.copy(
-                        jobYearStart = event.startYear
-                    )
-                }
+                val old = _state.value.experience[event.index]
+                _state.value.experience[event.index] = Experience(old.candidate_id, old.company_name, event.startYear, old.date_end, old.description)
             }
 
             is CandidateEvent.SetJobEndYear -> {
-                _state.update {
-                    it.copy(
-                        jobYearEnd = event.endYear
-                    )
-                }
+                val old = _state.value.experience[event.index]
+                _state.value.experience[event.index] = Experience(old.candidate_id, old.company_name, old.date_start, event.endYear, old.description)
             }
 
             is CandidateEvent.SetJobDescription -> {
-                _state.update {
-                    it.copy(
-                        jobDescription = event.description
-                    )
-                }
+                val old = _state.value.experience[event.index]
+                _state.value.experience[event.index] = Experience(old.candidate_id, old.company_name, old.date_start, old.date_end, event.description)
             }
         }
     }

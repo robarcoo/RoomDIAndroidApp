@@ -24,7 +24,7 @@ data class CandidateState(
     var educationYearStart: String? = "",
     var educationYearEnd: String? = "",
     var educationDescription: String? = "",
-    val experience: MutableList<Experience?>? = mutableStateListOf(),
+    val experience: MutableList<Experience> = mutableStateListOf(),
     var company: String? = "",
     var jobYearStart: String? = "",
     var jobYearEnd: String? = "",

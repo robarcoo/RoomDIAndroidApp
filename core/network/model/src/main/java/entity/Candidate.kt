@@ -12,7 +12,7 @@ data class Candidate(
     val candidate_info: CandidateInfo?,
     val education: List<Education>,
     @ColumnInfo(name="job_experience")
-    val job_experience: List<Experience?>?,
+    val job_experience: List<Experience>,
     @ColumnInfo(name="free_form")
     val free_form: String?,
 

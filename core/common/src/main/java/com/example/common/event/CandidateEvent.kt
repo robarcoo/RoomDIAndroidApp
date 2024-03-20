@@ -20,17 +20,17 @@ sealed interface CandidateEvent {
     data class saveWithoutChangesEducation(val education: MutableList<Education>) :
         CandidateEvent
     data class SetType(val type: String?, val index: Int) : CandidateEvent
-    data class SetEducationStartYear(val startYear: String?) : CandidateEvent
-    data class SetEducationEndYear(val endYear: String?) : CandidateEvent
-    data class SetEducationDescription(val description: String?): CandidateEvent
+    data class SetEducationStartYear(val startYear: String?, val index: Int) : CandidateEvent
+    data class SetEducationEndYear(val endYear: String?, val index: Int) : CandidateEvent
+    data class SetEducationDescription(val description: String?, val index: Int): CandidateEvent
 
-    data class SetCompany(val company: String?) : CandidateEvent
-    data class SetJobStartYear(val startYear: String?) : CandidateEvent
-    data class SetJobEndYear(val endYear: String?) : CandidateEvent
-    data class SetJobDescription(val description: String?) : CandidateEvent
-    data class saveWithChangesExperience(val experience: MutableList<Experience?>?) :
+    data class SetCompany(val company: String?, val index: Int) : CandidateEvent
+    data class SetJobStartYear(val startYear: String?, val index: Int) : CandidateEvent
+    data class SetJobEndYear(val endYear: String?, val index: Int) : CandidateEvent
+    data class SetJobDescription(val description: String?, val index: Int) : CandidateEvent
+    data class saveWithChangesExperience(val experience: MutableList<Experience>) :
         CandidateEvent
-    data class saveWithoutChangesExperience(val experience: MutableList<Experience?>?) :
+    data class saveWithoutChangesExperience(val experience: MutableList<Experience>) :
         CandidateEvent
     data class setFreeForm(val freeForm: String?) : CandidateEvent
     data object HideDialog: CandidateEvent
