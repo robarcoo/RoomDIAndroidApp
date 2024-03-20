@@ -9,6 +9,7 @@ import dao.CandidateDao
 import entity.Candidate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -22,7 +23,7 @@ suspend fun loadCandidatesOffline(): Flow<List<Candidate>>
 
     suspend fun deleteCandidate(candidate : Candidate) : Boolean
 
-    suspend fun getLastId() : Flow<Long>
+    suspend fun getLastId() : Long
 }
 
 class CandidateRepositoryImpl @Inject constructor(private val dao : CandidateDao, private val network: Network, private val context : Context) :
@@ -41,8 +42,9 @@ class CandidateRepositoryImpl @Inject constructor(private val dao : CandidateDao
         return dao.getCandidates()
     }
 
-    override suspend fun getLastId(): Flow<Long> {
-        return dao.getLastId()
+    override suspend fun getLastId(): Long {
+
+        return dao.getLastId().last()
     }
 
     override suspend fun deleteCandidate(candidate : Candidate) : Boolean {

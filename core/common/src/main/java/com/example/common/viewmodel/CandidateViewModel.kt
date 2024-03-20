@@ -53,9 +53,7 @@ class CandidateViewModel @Inject constructor(
     private fun getLastId() : Int {
         var id = 0
         viewModelScope.launch {
-             repository.getLastId().collect {
-                id = it.toInt()
-            }
+            id = repository.getLastId().toInt()
         }
         return id
     }
@@ -125,7 +123,7 @@ class CandidateViewModel @Inject constructor(
                     email = event.candidate.candidate_info?.contacts?.email,
                     phone = event.candidate.candidate_info?.contacts?.phone,
                     relocation = event.candidate.candidate_info?.relocation,
-                    education = event.candidate.education?.toMutableList(),
+                    education = event.candidate.education.toMutableList(),
                     experience = event.candidate.job_experience?.toMutableList(),
                     freeForm = event.candidate.free_form
                 )}
@@ -311,11 +309,10 @@ class CandidateViewModel @Inject constructor(
             }
 
             is CandidateEvent.SetType -> {
-                _state.update {
-                    it.copy(
-                        type = event.type
-                    )
-                }
+                val old = _state.value.education.get(event.index)
+                _state.value.education[event.index] = Education(old.candidate_id, event.type, old.year_start, old.year_end, old.description, old.id)
+//                currentState.education?.get(event.index)?.type = event.type
+//                _state.value = currentState
             }
 
             is CandidateEvent.SetEducationStartYear -> {

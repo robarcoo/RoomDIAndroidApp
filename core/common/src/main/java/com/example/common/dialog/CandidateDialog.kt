@@ -36,7 +36,7 @@ fun CandidateDialog(state: CandidateState,
         Column(verticalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.verticalScroll(rememberScrollState())) {
             TextField(
                 value = "${state.name}",
-                onValueChange = { onEvent(CandidateEvent.SetName(state.name))
+                onValueChange = { onEvent(CandidateEvent.SetName(it))
                 },
                 placeholder = {
                     Text(text = "Full Name")
@@ -44,7 +44,7 @@ fun CandidateDialog(state: CandidateState,
             )
             TextField(
                 value = "${state.profession}",
-                onValueChange = { onEvent(CandidateEvent.SetProfession(state.profession))
+                onValueChange = { onEvent(CandidateEvent.SetProfession(it))
                 },
                 placeholder = {
                     Text(text = "Profession")
@@ -52,7 +52,7 @@ fun CandidateDialog(state: CandidateState,
             )
             TextField(
                 value = "${state.sex}",
-                onValueChange = { onEvent(CandidateEvent.SetSex(state.sex))
+                onValueChange = { onEvent(CandidateEvent.SetSex(it))
                 },
                 placeholder = {
                     Text(text = "Sex")
@@ -60,7 +60,7 @@ fun CandidateDialog(state: CandidateState,
             )
             TextField(
                 value = "${state.dateBirth}",
-                onValueChange = { onEvent(CandidateEvent.SetDateOfBirth(state.dateBirth))
+                onValueChange = { onEvent(CandidateEvent.SetDateOfBirth(it))
                 },
                 placeholder = {
                     Text(text = "Date of Birth")
@@ -68,7 +68,7 @@ fun CandidateDialog(state: CandidateState,
             )
             TextField(
                 value = "${state.phone}",
-                onValueChange = { onEvent(CandidateEvent.SetPhone(state.phone))
+                onValueChange = { onEvent(CandidateEvent.SetPhone(it))
                 },
                 placeholder = {
                     Text(text = "Phone")
@@ -76,7 +76,7 @@ fun CandidateDialog(state: CandidateState,
             )
             TextField(
                 value = "${state.email}",
-                onValueChange = { onEvent(CandidateEvent.SetEmail(state.email))
+                onValueChange = { onEvent(CandidateEvent.SetEmail(it))
                 },
                 placeholder = {
                     Text(text = "Email")
@@ -84,39 +84,41 @@ fun CandidateDialog(state: CandidateState,
             )
             TextField(
                 value = "${state.relocation}",
-                onValueChange = { onEvent(CandidateEvent.SetRelocation(state.relocation))
+                onValueChange = { onEvent(CandidateEvent.SetRelocation(it))
                 },
                 placeholder = {
                     Text(text = "Relocation")
                 }
             )
+            var educationCount = -1
             state.education?.forEach {
-                it?.let { education ->
+                it.let { education ->
+                    educationCount++
                     Spacer(modifier = Modifier.size(15.dp))
                     TextField(
-                        value = "${ education.type}",
-                        onValueChange = { onEvent(CandidateEvent.SetType(education.type)) },
+                        value = "${education.type}",
+                        onValueChange = { str -> onEvent(CandidateEvent.SetType(str, educationCount)) },
                         placeholder = {
                             Text(text = "Education Type")
                         }
                     )
                     TextField(
                         value = "${education.year_start}",
-                        onValueChange = { onEvent(CandidateEvent.SetEducationStartYear(education.year_start)) },
+                        onValueChange = { str -> onEvent(CandidateEvent.SetEducationStartYear(str)) },
                         placeholder = {
                             Text(text = "Education Year Start")
                         }
                     )
                     TextField(
                         value = "${education.year_end}",
-                        onValueChange = { onEvent(CandidateEvent.SetEducationEndYear(education.year_end)) },
+                        onValueChange = { str -> onEvent(CandidateEvent.SetEducationEndYear(str)) },
                         placeholder = {
                             Text(text = "Education Year End")
                         }
                     )
                     TextField(
                         value = "${education.description}",
-                        onValueChange = { onEvent(CandidateEvent.SetEducationDescription(education.description)) },
+                        onValueChange = { str -> onEvent(CandidateEvent.SetEducationDescription(str)) },
                         placeholder = {
                             Text(text = "Education Description")
                         }
@@ -133,28 +135,28 @@ fun CandidateDialog(state: CandidateState,
                     Spacer(modifier = Modifier.size(15.dp))
                     TextField(
                         value = "${ experience.company_name}",
-                        onValueChange = { onEvent(CandidateEvent.SetCompany(experience.company_name)) },
+                        onValueChange = { str -> onEvent(CandidateEvent.SetCompany(str)) },
                         placeholder = {
                             Text(text = "Company Name")
                         }
                     )
                     TextField(
                         value = "${experience.date_start}",
-                        onValueChange = { onEvent(CandidateEvent.SetJobStartYear(experience.date_start)) },
+                        onValueChange = { str -> onEvent(CandidateEvent.SetJobStartYear(str)) },
                         placeholder = {
                             Text(text = "Started Working at Company")
                         }
                     )
                     TextField(
                         value = "${experience.date_end}",
-                        onValueChange = { onEvent(CandidateEvent.SetJobEndYear(experience.date_end)) },
+                        onValueChange = { str -> onEvent(CandidateEvent.SetJobEndYear(str)) },
                         placeholder = {
                             Text(text = "Finished Working at Company")
                         }
                     )
                     TextField(
                         value = "${experience.description}",
-                        onValueChange = { onEvent(CandidateEvent.SetJobDescription(experience.description)) },
+                        onValueChange = { str -> onEvent(CandidateEvent.SetJobDescription(str)) },
                         placeholder = {
                             Text(text = "Former Job Description")
                         }

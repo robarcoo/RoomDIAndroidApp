@@ -15,11 +15,11 @@ sealed interface CandidateEvent {
     data class SetPhone(val phone: String?) : CandidateEvent
     data class SetRelocation(val relocation: String?): CandidateEvent
 
-    data class saveWithChangesEducation(val education: MutableList<Education?>?) :
+    data class saveWithChangesEducation(val education: MutableList<Education>) :
         CandidateEvent
-    data class saveWithoutChangesEducation(val education: MutableList<Education?>?) :
+    data class saveWithoutChangesEducation(val education: MutableList<Education>) :
         CandidateEvent
-    data class SetType(val type: String?) : CandidateEvent
+    data class SetType(val type: String?, val index: Int) : CandidateEvent
     data class SetEducationStartYear(val startYear: String?) : CandidateEvent
     data class SetEducationEndYear(val endYear: String?) : CandidateEvent
     data class SetEducationDescription(val description: String?): CandidateEvent
