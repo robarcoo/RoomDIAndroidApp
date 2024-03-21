@@ -15,7 +15,7 @@ import entity.Experience
     CandidateInfo::class,
     Contact::class,
     Education::class,
-    Experience::class], version = 3)
+    Experience::class], version = 4)
 @TypeConverters(CandidateConverter::class)
 abstract class CandidateDatabase : RoomDatabase() {
 

@@ -19,11 +19,13 @@ interface CandidateRepository {
     suspend fun loadCandidates() : Flow<List<Candidate>>
 suspend fun loadCandidatesOffline(): Flow<List<Candidate>>
 
-    suspend fun insertCandidate(candidate : Candidate)
+    suspend fun insertCandidate(candidate : Candidate) : Boolean
 
     suspend fun deleteCandidate(candidate : Candidate) : Boolean
 
     suspend fun getLastId() : Long
+
+    suspend fun editCandidate(candidate: Candidate, id: Int) : Boolean
 }
 
 class CandidateRepositoryImpl @Inject constructor(private val dao : CandidateDao, private val network: Network, private val context : Context) :
@@ -63,8 +65,34 @@ class CandidateRepositoryImpl @Inject constructor(private val dao : CandidateDao
 
     }
 
-    override suspend fun insertCandidate(candidate : Candidate) {
-        dao.insertCandidate(candidate)
+    override suspend fun insertCandidate(candidate : Candidate) : Boolean {
+        val candidateApi : CandidateApi = network.getRetrofit().create(CandidateApi::class.java)
+        return try {
+            candidateApi.insertCandidate(candidate)
+            dao.insertCandidate(candidate)
+            true
+        } catch (e : Exception) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "Can't make changes when offline.", Toast.LENGTH_SHORT).show()
+
+            }
+            false
+        }
+    }
+
+    override suspend fun editCandidate(candidate : Candidate, id: Int) : Boolean {
+        val candidateApi : CandidateApi = network.getRetrofit().create(CandidateApi::class.java)
+        return try {
+            candidateApi.editCandidate(id, candidate)
+            dao.insertCandidate(candidate)
+            true
+        } catch (e : Exception) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(context, "Can't make changes when offline.", Toast.LENGTH_SHORT).show()
+
+            }
+            false
+        }
     }
 
 }

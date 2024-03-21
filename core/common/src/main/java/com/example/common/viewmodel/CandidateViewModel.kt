@@ -123,10 +123,11 @@ class CandidateViewModel @Inject constructor(
                     email = event.candidate.candidate_info?.contacts?.email,
                     phone = event.candidate.candidate_info?.contacts?.phone,
                     relocation = event.candidate.candidate_info?.relocation,
-                    education = event.candidate.education.toMutableList(),
-                    experience = event.candidate.job_experience.toMutableList(),
+                    education = event.candidate.education?.toMutableList() ?: mutableListOf(),
+                    experience = event.candidate.job_experience?.toMutableList() ?: mutableListOf(),
                     freeForm = event.candidate.free_form
                 )}
+
             }
 
             is CandidateEvent.saveWithChangesEducation -> {
@@ -190,17 +191,19 @@ class CandidateViewModel @Inject constructor(
             }
 
             CandidateEvent.SaveCandidate -> {
-                val candidate_id = state.value.id
-                val name = state.value.name
-                val sex = state.value.sex
-                val dateBirth = state.value.dateBirth
-                val profession = state.value.profession
-                val email = state.value.email
-                val phone = state.value.phone
-                val relocation = state.value.relocation
-                val education = state.value.education
-                val experience = state.value.experience
-                val freeForm = state.value.freeForm
+
+                val candidate_id = _state.value.id
+                val name = _state.value.name
+                val sex = _state.value.sex
+                val dateBirth = _state.value.dateBirth
+                val profession = _state.value.profession
+                val email = _state.value.email
+                val phone = _state.value.phone
+                val relocation = _state.value.relocation
+                val education = _state.value.education
+                val experience = _state.value.experience
+                val freeForm = _state.value.freeForm
+
 
                 if (name == "" ||
                     sex == "" ||
@@ -224,14 +227,20 @@ class CandidateViewModel @Inject constructor(
                     job_experience = experience,
                     free_form = freeForm
                 )
+                viewModelScope.launch(Dispatchers.IO) {
+                    val success =  if (_state.value.isAddingCandidate) {
+                        repository.insertCandidate(candidate)
+                    } else {
+                        repository.editCandidate(candidate, candidate_id)
+                    }
+                    if (success) {
+                        _state.update {
+                            cleanState(it)
+                        }
+                    }
 
-                viewModelScope.launch {
-                    repository.insertCandidate(candidate)
                 }
 
-                _state.update {
-                    cleanState(it)
-                }
             }
 
 

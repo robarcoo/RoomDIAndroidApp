@@ -11,26 +11,33 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.common.event.CandidateEvent
 import com.example.common.viewmodel.CandidateState
 import entity.Education
 import entity.Experience
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun CandidateDialog(state: CandidateState,
                     onEvent: (CandidateEvent) -> Unit,
                     modifier: Modifier = Modifier
     ) {
+    val coroutineScope = rememberCoroutineScope()
     AlertDialog(modifier = modifier, onDismissRequest = { CandidateEvent.HideDialog },
         dismissButton = {
         Button( onClick = {
         onEvent(CandidateEvent.HideDialog) }) {
-            Text(text = "Cancel") }
-                                                        },
-        confirmButton = { Button( onClick = { onEvent(
-        CandidateEvent.SaveCandidate) }) { Text (text = "Save Resume")} },
+            Text(text = "Cancel") } },
+        confirmButton = { Button( onClick = {
+            coroutineScope.launch(Dispatchers.IO) {
+                    onEvent(CandidateEvent.SaveCandidate)
+                }
+        }
+        ) { Text (text = "Save Resume")} },
         title = { Text(text = "Edit candidate")},
     text = {
         Column(verticalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.verticalScroll(rememberScrollState())) {

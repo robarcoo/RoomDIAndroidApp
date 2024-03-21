@@ -10,9 +10,9 @@ data class Candidate(
     var id: Int = 0,
     @ColumnInfo( name = "candidate_info")
     val candidate_info: CandidateInfo?,
-    val education: List<Education>,
+    val education: List<Education>?,
     @ColumnInfo(name="job_experience")
-    val job_experience: List<Experience>,
+    val job_experience: List<Experience>?,
     @ColumnInfo(name="free_form")
     val free_form: String?,
 
