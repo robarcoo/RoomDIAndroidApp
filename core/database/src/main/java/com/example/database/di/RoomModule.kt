@@ -22,7 +22,7 @@ object RoomModule {
     @ViewModelScoped
     @Provides
     fun provideDB(@ApplicationContext context: Context) : CandidateDatabase {
-        return Room.databaseBuilder(context, CandidateDatabase::class.java, "database.db")
+        return Room.databaseBuilder(context, CandidateDatabase::class.java, "database1.db")
             .fallbackToDestructiveMigration()
             .build()
     }

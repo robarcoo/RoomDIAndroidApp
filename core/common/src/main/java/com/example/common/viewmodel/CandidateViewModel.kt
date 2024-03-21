@@ -30,6 +30,7 @@ class CandidateViewModel @Inject constructor(
     private var candidates = MutableStateFlow(CandidateState())
     init {
         viewModelScope.launch(Dispatchers.IO) {
+
             try {
                 repository.loadCandidates().collect {
                     _state.value.candidates = it
@@ -228,10 +229,10 @@ class CandidateViewModel @Inject constructor(
                     free_form = freeForm
                 )
                 viewModelScope.launch(Dispatchers.IO) {
-                    val success =  if (_state.value.isAddingCandidate) {
-                        repository.insertCandidate(candidate)
-                    } else {
+                    val success =  if (_state.value.isEditingCandidate) {
                         repository.editCandidate(candidate, candidate_id)
+                    } else {
+                        repository.insertCandidate(candidate)
                     }
                     if (success) {
                         _state.update {

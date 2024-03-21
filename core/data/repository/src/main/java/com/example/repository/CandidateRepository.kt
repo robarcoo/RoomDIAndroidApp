@@ -25,17 +25,20 @@ suspend fun loadCandidatesOffline(): Flow<List<Candidate>>
 
     suspend fun getLastId() : Long
 
+
     suspend fun editCandidate(candidate: Candidate, id: Int) : Boolean
 }
 
 class CandidateRepositoryImpl @Inject constructor(private val dao : CandidateDao, private val network: Network, private val context : Context) :
     CandidateRepository {
+
+
     override suspend fun loadCandidates() : Flow<List<Candidate>> {
         val candidateApi : CandidateApi = network.getRetrofit().create(CandidateApi::class.java)
         val candidates = candidateApi.getAllCandidates()
 
         candidates.forEach {
-                dao.insertCandidate(it)
+                dao.insertOrUpdateCandidate(it)
         }
         return dao.getCandidates()
     }
@@ -69,7 +72,7 @@ class CandidateRepositoryImpl @Inject constructor(private val dao : CandidateDao
         val candidateApi : CandidateApi = network.getRetrofit().create(CandidateApi::class.java)
         return try {
             candidateApi.insertCandidate(candidate)
-            dao.insertCandidate(candidate)
+            dao.insertOrUpdateCandidate(candidate)
             true
         } catch (e : Exception) {
             withContext(Dispatchers.Main) {
@@ -84,7 +87,7 @@ class CandidateRepositoryImpl @Inject constructor(private val dao : CandidateDao
         val candidateApi : CandidateApi = network.getRetrofit().create(CandidateApi::class.java)
         return try {
             candidateApi.editCandidate(id, candidate)
-            dao.insertCandidate(candidate)
+            dao.insertOrUpdateCandidate(candidate)
             true
         } catch (e : Exception) {
             withContext(Dispatchers.Main) {

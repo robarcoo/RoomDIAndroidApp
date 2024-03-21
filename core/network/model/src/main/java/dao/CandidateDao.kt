@@ -10,8 +10,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CandidateDao {
 
-    @Upsert
-    fun insertCandidate(candidate: Candidate)
+    @Upsert(entity = Candidate::class)
+    fun insertOrUpdateCandidate(candidate: Candidate)
+
 
 
     @Delete
