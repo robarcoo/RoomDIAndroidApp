@@ -71,7 +71,8 @@ class CandidateRepositoryImpl @Inject constructor(private val dao : CandidateDao
     override suspend fun insertCandidate(candidate : Candidate) : Boolean {
         val candidateApi : CandidateApi = network.getRetrofit().create(CandidateApi::class.java)
         return try {
-            candidateApi.insertCandidate(candidate)
+            val id = candidateApi.insertCandidate(candidate)
+            candidate.id = id
             dao.insertOrUpdateCandidate(candidate)
             true
         } catch (e : Exception) {

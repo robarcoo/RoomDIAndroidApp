@@ -23,6 +23,6 @@ interface CandidateApi {
     suspend fun deleteCandidate(@Path("id") id: Int) : Candidate
 
     @POST("candidate")
-    suspend fun insertCandidate(@Body candidate: Candidate)
+    suspend fun insertCandidate(@Body candidate: Candidate) : Int
 
 }

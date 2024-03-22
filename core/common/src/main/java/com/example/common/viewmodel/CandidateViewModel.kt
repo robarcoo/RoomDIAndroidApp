@@ -30,14 +30,13 @@ class CandidateViewModel @Inject constructor(
     private var candidates = MutableStateFlow(CandidateState())
     init {
         viewModelScope.launch(Dispatchers.IO) {
-
             try {
                 repository.loadCandidates().collect {
-                    _state.value.candidates = it
+                    _state.value.candidates = it.toMutableList()
                 }
             } catch (e : Exception) {
                 repository.loadCandidatesOffline().collect {
-                    _state.value.candidates = it
+                    _state.value.candidates = it.toMutableList()
                 }
 
         }
@@ -105,8 +104,9 @@ class CandidateViewModel @Inject constructor(
                 )}
             }
             CandidateEvent.NewCandidate -> {
+                val newId = (state.value.candidates.maxByOrNull { candidate -> candidate.id }?.id ?: 0) + 1
                 _state.update { it.copy(
-                    id = getLastId() + 1,
+                    id = newId,
                     isAddingCandidate = true
                 )}
             }
@@ -216,6 +216,7 @@ class CandidateViewModel @Inject constructor(
                     return
                 }
                 val candidate = Candidate(
+                    id = candidate_id,
                     candidate_info = CandidateInfo(
                         candidate_id = candidate_id,
                         name = name,
@@ -230,8 +231,11 @@ class CandidateViewModel @Inject constructor(
                 )
                 viewModelScope.launch(Dispatchers.IO) {
                     val success =  if (_state.value.isEditingCandidate) {
+                        val index = _state.value.candidates.indexOf(_state.value.candidates.find { it.id == candidate_id })
+                        _state.value.candidates[index] = candidate
                         repository.editCandidate(candidate, candidate_id)
                     } else {
+                        _state.value.candidates.add(candidate)
                         repository.insertCandidate(candidate)
                     }
                     if (success) {

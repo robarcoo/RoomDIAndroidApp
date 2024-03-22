@@ -11,7 +11,7 @@ data class CandidateState(
     val isEditingCandidate: Boolean = false,
     val isAddingEducation: Boolean = false,
     val isAddingExperience: Boolean = false,
-    var candidates: List<Candidate> = emptyList(),
+    var candidates: MutableList<Candidate> = mutableStateListOf(),
     var name: String? = "",
     var profession: String? = "",
     var sex: String? = "",
