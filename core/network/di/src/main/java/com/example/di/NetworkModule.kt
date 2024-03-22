@@ -22,7 +22,7 @@ class NetworkModule() {
     @Singleton
     fun provideOkhttp(): OkHttpClient {
         return OkHttpClient().newBuilder()
-            .connectTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(10, TimeUnit.SECONDS)
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .addInterceptor(HttpLoggingInterceptor().apply {
@@ -37,7 +37,7 @@ class NetworkModule() {
     }
     @Provides
     @Singleton
-    fun provideRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit { // in this example gson provider is also needed
+    fun provideRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create(gson))
             .baseUrl("http://10.10.0.5:8080")

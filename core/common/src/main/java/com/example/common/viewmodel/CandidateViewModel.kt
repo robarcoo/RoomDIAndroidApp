@@ -1,5 +1,6 @@
 package com.example.common.viewmodel
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -98,19 +99,23 @@ class CandidateViewModel @Inject constructor(
                     }
             }
             CandidateEvent.HideDialog -> {
-                _state.update { it.copy(
-                    isAddingCandidate = false,
-                    isEditingCandidate = false
-                )}
+                _state.update {
+                    cleanState(it)
+                }
             }
             CandidateEvent.NewCandidate -> {
-                val newId = (state.value.candidates.maxByOrNull { candidate -> candidate.id }?.id ?: 0) + 1
+                val newId = (_state.value.candidates.maxByOrNull { candidate -> candidate.id }?.id ?: 0) + 1
                 _state.update { it.copy(
                     id = newId,
                     isAddingCandidate = true
                 )}
             }
             is CandidateEvent.EditCandidate -> {
+                val snapshotStateEducation = mutableStateListOf<Education>()
+                event.candidate.education?.let { snapshotStateEducation.addAll(it) }
+                val snapshotStateExperience = mutableStateListOf<Experience>()
+                event.candidate.job_experience?.let { snapshotStateExperience.addAll(it) }
+
                 _state.update { it.copy(
                     event.candidate.id,
                     isAddingCandidate = false,
@@ -124,37 +129,35 @@ class CandidateViewModel @Inject constructor(
                     email = event.candidate.candidate_info?.contacts?.email,
                     phone = event.candidate.candidate_info?.contacts?.phone,
                     relocation = event.candidate.candidate_info?.relocation,
-                    education = event.candidate.education?.toMutableList() ?: mutableListOf(),
-                    experience = event.candidate.job_experience?.toMutableList() ?: mutableListOf(),
+                    education = snapshotStateEducation,
+                    experience = snapshotStateExperience,
                     freeForm = event.candidate.free_form
                 )}
 
             }
 
-            is CandidateEvent.saveWithChangesEducation -> {
-                val candidate_id = state.value.id
-                val type = state.value.type
-                val educationStartYear = state.value.educationYearStart
-                val educationEndYear = state.value.educationYearEnd
-                val educationDescription = state.value.educationDescription
-
-                if (type == "" ||
-                    educationStartYear == "" ||
-                    educationEndYear == "" ||
-                    educationDescription == "") {
-                    return
-                }
-
-                val education = Education(candidate_id,
-                    type,
-                    educationStartYear,
-                    educationEndYear,
-                    educationDescription)
-                val newEducation = _state.value.education
-                newEducation.add(education)
+            is CandidateEvent.setEducation -> {
+//                val candidate_id = state.value.id
+//                val type = state.value.type
+//                val educationStartYear = state.value.educationYearStart
+//                val educationEndYear = state.value.educationYearEnd
+//                val educationDescription = state.value.educationDescription
+//
+//                if (type == "" ||
+//                    educationStartYear == "" ||
+//                    educationEndYear == "" ||
+//                    educationDescription == "") {
+//                    return
+//                }
+//
+//                val education = Education(candidate_id,
+//                    type,
+//                    educationStartYear,
+//                    educationEndYear,
+//                    educationDescription)
                 _state.update { candidate ->
                     candidate.copy(
-                        education = newEducation
+                        education = event.education
                     )
                 }
             }
@@ -247,6 +250,19 @@ class CandidateViewModel @Inject constructor(
                 }
 
             }
+
+            is CandidateEvent.addEducation -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    repository.addEducation(event.index)
+                }
+            }
+
+            is CandidateEvent.addExperience -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    repository.addExperience(event.index)
+                }
+            }
+
 
 
             is CandidateEvent.saveWithoutChangesEducation -> {

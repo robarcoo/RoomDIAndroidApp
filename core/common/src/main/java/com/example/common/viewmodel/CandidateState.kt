@@ -19,7 +19,7 @@ data class CandidateState(
     var email: String? = "",
     var phone: String? = "",
     var relocation: String? = "",
-    val education: MutableList<Education> = mutableStateListOf(),
+    var education: MutableList<Education> = mutableStateListOf(),
     var type: String? = "",
     var educationYearStart: String? = "",
     var educationYearEnd: String? = "",

@@ -15,7 +15,13 @@ sealed interface CandidateEvent {
     data class SetPhone(val phone: String?) : CandidateEvent
     data class SetRelocation(val relocation: String?): CandidateEvent
 
-    data class saveWithChangesEducation(val education: MutableList<Education>) :
+    data class setEducation(val education: MutableList<Education>) :
+        CandidateEvent
+
+    data class addEducation(val index: Int) :
+        CandidateEvent
+
+    data class addExperience(val index: Int) :
         CandidateEvent
     data class saveWithoutChangesEducation(val education: MutableList<Education>) :
         CandidateEvent

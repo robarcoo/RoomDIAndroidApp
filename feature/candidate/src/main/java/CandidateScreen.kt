@@ -115,7 +115,7 @@ fun CandidateScreen(state: CandidateState, onEvent: (CandidateEvent) -> Unit) {
                                     Text(text = "Education", fontWeight = FontWeight.Bold)
                                     Spacer(modifier = Modifier.size(20.dp))
                                     educationList.forEach { education ->
-                                        education?.let {
+                                        education.let {
                                             Card(modifier = Modifier.fillMaxSize()) {
                                                 Column(Modifier.padding(15.dp)) {
                                                     Text(text = "Type: ${it.type}")
@@ -134,7 +134,7 @@ fun CandidateScreen(state: CandidateState, onEvent: (CandidateEvent) -> Unit) {
                                     Text(text = "Experience", fontWeight = FontWeight.Bold)
                                     Spacer(modifier = Modifier.size(20.dp))
                                     jobList.forEach { job ->
-                                        job?.let {
+                                        job.let {
                                             Card(modifier = Modifier.fillMaxSize()) {
                                                 Column(Modifier.padding(15.dp)) {
                                                     Text(text = "Company: ${it.company_name}")
