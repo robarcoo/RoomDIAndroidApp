@@ -8,7 +8,6 @@ import retrofit2.http.Path
 interface VacancyApi {
     @GET("vacancy")
     suspend fun getAllVacancies() : List<Vacancy>
-
     @GET("vacancy/{id}")
     suspend fun getVacancyById(@Path("id") id : Int) : FullVacancy
 }

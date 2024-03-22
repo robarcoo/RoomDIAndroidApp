@@ -1,8 +1,6 @@
 package com.example.common.event
 
 import entity.Candidate
-import entity.Education
-import entity.Experience
 
 sealed interface CandidateEvent {
     data object SaveCandidate: CandidateEvent
@@ -15,15 +13,10 @@ sealed interface CandidateEvent {
     data class SetPhone(val phone: String?) : CandidateEvent
     data class SetRelocation(val relocation: String?): CandidateEvent
 
-    data class setEducation(val education: MutableList<Education>) :
-        CandidateEvent
-
     data class addEducation(val index: Int) :
         CandidateEvent
 
     data class addExperience(val index: Int) :
-        CandidateEvent
-    data class saveWithoutChangesEducation(val education: MutableList<Education>) :
         CandidateEvent
     data class SetType(val type: String?, val index: Int) : CandidateEvent
     data class SetEducationStartYear(val startYear: String?, val index: Int) : CandidateEvent
@@ -34,10 +27,6 @@ sealed interface CandidateEvent {
     data class SetJobStartYear(val startYear: String?, val index: Int) : CandidateEvent
     data class SetJobEndYear(val endYear: String?, val index: Int) : CandidateEvent
     data class SetJobDescription(val description: String?, val index: Int) : CandidateEvent
-    data class saveWithChangesExperience(val experience: MutableList<Experience>) :
-        CandidateEvent
-    data class saveWithoutChangesExperience(val experience: MutableList<Experience>) :
-        CandidateEvent
     data class setFreeForm(val freeForm: String?) : CandidateEvent
     data object HideDialog: CandidateEvent
     data object NewCandidate: CandidateEvent

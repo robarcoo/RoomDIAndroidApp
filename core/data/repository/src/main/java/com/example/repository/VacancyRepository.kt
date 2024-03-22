@@ -7,7 +7,6 @@ import com.example.retrofit.VacancyApi
 
 interface VacancyRepository {
     suspend fun getAllVacancies() : List<Vacancy>
-
     suspend fun getVacancyById(id : Int) : FullVacancy
 }
 

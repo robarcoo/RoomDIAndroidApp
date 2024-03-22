@@ -18,6 +18,5 @@ import entity.Experience
     Experience::class], version = 4)
 @TypeConverters(CandidateConverter::class)
 abstract class CandidateDatabase : RoomDatabase() {
-
     abstract fun candidateDao() : CandidateDao
 }

@@ -9,26 +9,16 @@ import dao.CandidateDao
 import entity.Candidate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 interface CandidateRepository {
-
-
     suspend fun loadCandidates() : Flow<List<Candidate>>
-suspend fun loadCandidatesOffline(): Flow<List<Candidate>>
-
+    suspend fun loadCandidatesOffline(): Flow<List<Candidate>>
     suspend fun insertCandidate(candidate : Candidate) : Boolean
-
     suspend fun deleteCandidate(candidate : Candidate) : Boolean
-
-    suspend fun getLastId() : Long
-
     suspend fun addEducation(id: Int) : Boolean
-
     suspend fun addExperience(id: Int) : Boolean
-
     suspend fun editCandidate(candidate: Candidate, id: Int) : Boolean
 }
 
@@ -76,13 +66,6 @@ class CandidateRepositoryImpl @Inject constructor(private val dao : CandidateDao
 
     override suspend fun loadCandidatesOffline() : Flow<List<Candidate>> {
         return dao.getCandidates()
-    }
-
-
-
-    override suspend fun getLastId(): Long {
-
-        return dao.getLastId().last()
     }
 
     override suspend fun deleteCandidate(candidate : Candidate) : Boolean {

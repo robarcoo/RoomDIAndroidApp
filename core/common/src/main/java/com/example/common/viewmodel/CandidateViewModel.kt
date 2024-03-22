@@ -51,20 +51,12 @@ class CandidateViewModel @Inject constructor(
         )
     }.flowOn(Dispatchers.IO).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), CandidateState())
 
-    private fun getLastId() : Int {
-        var id = 0
-        viewModelScope.launch {
-            id = repository.getLastId().toInt()
-        }
-        return id
-    }
+
     private fun cleanState(candidateState: CandidateState) : CandidateState{
         return candidateState.copy(
             0,
             isAddingCandidate = false,
             isEditingCandidate = false,
-            isAddingEducation = false,
-            isAddingExperience = false,
             name = "",
             profession = "",
             sex = "",
@@ -73,15 +65,7 @@ class CandidateViewModel @Inject constructor(
             phone = "",
             relocation = "",
             education = SnapshotStateList(),
-            type = "",
-            educationYearStart = "",
-            educationYearEnd = "",
-            educationDescription = "",
             experience = SnapshotStateList(),
-            company = "",
-            jobYearStart = "",
-            jobYearEnd = "",
-            jobDescription = "",
             freeForm = ""
         )
     }
@@ -120,8 +104,6 @@ class CandidateViewModel @Inject constructor(
                     event.candidate.id,
                     isAddingCandidate = false,
                     isEditingCandidate = true,
-                    isAddingEducation = false,
-                    isAddingExperience = false,
                     name = event.candidate.candidate_info?.name,
                     profession = event.candidate.candidate_info?.profession,
                     sex = event.candidate.candidate_info?.sex,
@@ -136,63 +118,7 @@ class CandidateViewModel @Inject constructor(
 
             }
 
-            is CandidateEvent.setEducation -> {
-//                val candidate_id = state.value.id
-//                val type = state.value.type
-//                val educationStartYear = state.value.educationYearStart
-//                val educationEndYear = state.value.educationYearEnd
-//                val educationDescription = state.value.educationDescription
-//
-//                if (type == "" ||
-//                    educationStartYear == "" ||
-//                    educationEndYear == "" ||
-//                    educationDescription == "") {
-//                    return
-//                }
-//
-//                val education = Education(candidate_id,
-//                    type,
-//                    educationStartYear,
-//                    educationEndYear,
-//                    educationDescription)
-                _state.update { candidate ->
-                    candidate.copy(
-                        education = event.education
-                    )
-                }
-            }
 
-            is CandidateEvent.saveWithChangesExperience -> {
-                val candidate_id = state.value.id
-                val company = state.value.company
-                val jobStartYear = state.value.jobYearStart
-                val jobEndYear = state.value.jobYearEnd
-                val jobDescription = state.value.jobDescription
-
-
-                if (company == "" || jobStartYear == "" ||
-                    jobEndYear == "" || jobDescription == "") {
-                    return
-                }
-
-                val jobExperience = Experience(
-                    candidate_id,
-                    company,
-                    jobStartYear,
-                    jobEndYear,
-                    jobDescription
-                )
-
-                val newJobExperience = _state.value.experience
-                newJobExperience.add(jobExperience)
-                _state.update {
-                    job ->
-                    job.copy(
-                        experience = newJobExperience
-                    )
-                }
-
-            }
 
             CandidateEvent.SaveCandidate -> {
 
@@ -263,18 +189,6 @@ class CandidateViewModel @Inject constructor(
                 }
             }
 
-
-
-            is CandidateEvent.saveWithoutChangesEducation -> {
-                _state.update { it.copy (
-                    education = event.education
-                ) }
-            }
-            is CandidateEvent.saveWithoutChangesExperience -> {
-                _state.update { it.copy (
-                    experience = event.experience
-                )}
-            }
             is CandidateEvent.setFreeForm -> {
                 _state.update { it.copy (
                     freeForm = event.freeForm

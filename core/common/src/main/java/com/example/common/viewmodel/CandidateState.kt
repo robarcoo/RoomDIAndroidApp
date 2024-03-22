@@ -9,8 +9,6 @@ data class CandidateState(
     val id: Int = 0,
     val isAddingCandidate: Boolean = false,
     val isEditingCandidate: Boolean = false,
-    val isAddingEducation: Boolean = false,
-    val isAddingExperience: Boolean = false,
     var candidates: MutableList<Candidate> = mutableStateListOf(),
     var name: String? = "",
     var profession: String? = "",
@@ -20,14 +18,6 @@ data class CandidateState(
     var phone: String? = "",
     var relocation: String? = "",
     var education: MutableList<Education> = mutableStateListOf(),
-    var type: String? = "",
-    var educationYearStart: String? = "",
-    var educationYearEnd: String? = "",
-    var educationDescription: String? = "",
     val experience: MutableList<Experience> = mutableStateListOf(),
-    var company: String? = "",
-    var jobYearStart: String? = "",
-    var jobYearEnd: String? = "",
-    var jobDescription: String? = "",
     var freeForm: String? = ""
     )
